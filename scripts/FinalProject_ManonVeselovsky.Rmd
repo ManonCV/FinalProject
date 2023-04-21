@@ -30,8 +30,10 @@ library(suncalc) #moon phase/illumination package
 library(ggplot2) #for plotting
 library(dplyr) #for number of distinct individuals/ids
 library(effects) #for effects plots
-library(performance) #for diagnostic plots on glmer
-library(DHARMa)
+library(performance) #for diagnostic plots on glmer - normality of random variables
+library(DHARMa) #diagnostic plot for dispersion (over/under)
+
+
 ```
 
 
@@ -154,20 +156,24 @@ ggplot(depart_final, aes(x=illum, y=roost)) + geom_point(size=4, alpha=0.5, colo
 
 ``` {r}
 
-m <- glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=depart_final, family="binomial")
+m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=depart_final_scaled, family="binomial")
 
-m_scaled = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=depart_final_scaled, family="binomial")
-
-mq_scaled = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=depart_final_scaled, family="quasibinomial")
 
 #examine diagnostic plots
 check_model(m)
-check_model(m_scaled)
 
-testDispersion(m)
-testDispersion(m_scaled)
-plot(m)
-plot(m_scaled)
+#check for over/under dispersion using DHARMa
+testDispersion(m) 
+scaled_res <- simulateResiduals(m)
+plot(scaled_res)
+
+testZeroInflation(m, plot = TRUE)
+testZeroInflation(m_scaled, plot = TRUE)
+
+par(mfrow = c(1, 2))
+plot(residuals(m) ~ fitted(m), main = "residuals v.s. Fitted")
+qqnorm(residuals(m))
+
 
 Anova(m,type=3)
 Anova(m_scaled,type=3)
@@ -175,16 +181,6 @@ summary(m)
 effects_m =allEffects(m)
 plot(allEffects(m))
 vif(m)
-
-scaled_res <- simulateResiduals(m)
-plot(scaled_res)
-
-scaled_res <- simulateResiduals(m_scaled)
-plot(scaled_res)
-
-
-testZeroInflation(m, plot = TRUE)
-testZeroInflation(m_scaled, plot = TRUE)
 
 ```
 
