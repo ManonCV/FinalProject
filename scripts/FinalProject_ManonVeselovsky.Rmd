@@ -32,7 +32,8 @@ library(dplyr) #for number of distinct individuals/ids
 library(effects) #for effects plots
 library(performance) #for diagnostic plots on glmer - normality of random variables
 library(DHARMa) #diagnostic plot for dispersion (over/under)
-
+library(datawizard) #for scaling and centering
+library(tidyverse) #for data management/processing
 
 ```
 
@@ -128,8 +129,10 @@ depart_final_scaled <- depart_final %>%
 # Plot the probability of roosting in the wetland complex against the distance from the colony to the wetland complex
 ggplot(depart_final, aes(x=distance, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Distance to roost site (km)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(25,90), breaks=c(30,40,50,60,70,80,90)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
 
-# Plot the probability of roosting in the wetland complex against the ordinal date in the season, with separate panels for males and females
-ggplot(depart_transformed, aes(x=ordinal_date, y=roost)) + facet_grid(.~sex) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Ordinal date") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(150,200), breaks=c(150,160,170,180,190,200)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+# Plot the probability of roosting in the wetland complex against the ordinal date in the season
+ggplot(depart_final, aes(x=ordinal_date, y=roost)) + facet_grid(~sex) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Ordinal date") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(150,200), breaks=c(150,160,170,180,190,200)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+
 
 # Plot the probability of roosting in the wetland complex against the surface air temperature
 ggplot(depart_final, aes(x=temp, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Air temperature (deg C)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(15,20,25,30)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
@@ -161,33 +164,29 @@ ggplot(depart_final, aes(x=illum, y=roost)) + geom_point(size=4, alpha=0.5, colo
 
 ``` {r}
 
-m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=depart_final, family="binomial",na.action=na.omit)
+m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=depart_final_scaled, family="binomial",na.action=na.omit)
 
-depart_transformed = depart_final
-depart_transformed$ordinal_date = exp(depart_final$ordinal_date)
-
-m_trans = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=depart_transformed, family="binomial")
-
+#requires scaling and centering
+df.scale = standardize(depart_final,select=c("distance","ordinal_date"))
+m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale_nas, family="binomial",na.action=na.omit)
 
 
 #examine diagnostic plots
 check_model(m)
+# performance::binned_residuals(m, term='ordinal_date')
+# performance::binned_residuals(m, term='distance')
+# performance::binned_residuals(m, term='moon.phase')
+
 
 #check for over/under dispersion using DHARMa
 testDispersion(m) 
-scaled_res <- simulateResiduals(m)
-plot(scaled_res)
 dharm_output = simulateResiduals(fittedModel=m,plot = F)
 plot(dharm_output)
-plotResiduals(dharm_output, form="distance")
-
-testZeroInflation(m, plot = TRUE)
-testZeroInflation(m_scaled, plot = TRUE)
-
-par(mfrow = c(1, 2))
-plot(residuals(m) ~ fitted(m), main = "residuals v.s. Fitted")
-qqnorm(residuals(m))
-
+plotResiduals(dharm_output, form=df.scale_nas$distance)
+plotResiduals(dharm_output, form=df.scale_nas$ordinal_date)
+plotResiduals(dharm_output, form=df.scale_nas$sex)
+plotResiduals(dharm_output, form=df.scale_nas$id)
+plotResiduals(dharm_output, form=df.scale_nas$colony)
 
 Anova(m,type=3)
 Anova(m_scaled,type=3)
