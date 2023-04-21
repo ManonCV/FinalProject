@@ -1,0 +1,514 @@
+####Breeding Season Movement to Wetlands####
+
+setwd("C:/Users/MitchellGr/Documents/BANS_2017/BANS_MOTUS_DATA/FINAL_ANALYSIS")
+
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(ggmap)
+library(plotly)
+library(rgdal)
+library(geosphere)
+library(splitstackshape)
+library(GeoLight)
+library(RNCEP)
+library(glmmADMB)
+
+
+
+
+####Get tower locations####
+
+detections <- readRDS("2015_ErieBANS_globaltags.rds")
+
+detections <- detections[order(detections$site),]
+
+individual <- unique(detections$site)
+
+group2 <- NULL
+
+for(i in 1:length(individual))
+{
+group1 <- detections[detections$site==individual[i],]
+group1 <- group1[1, c(21,22,26)]
+group2 <- rbind(group2, group1)
+}
+
+sites <- group2
+
+#Note - provides list of individual tower locations.
+
+sites2 <- sites[sites$site=="TurkeyPoint" |sites$site=="OldCut" |sites$site=="LongPointEcoAdv" | sites$site=="Breakwater" | sites$site=="LongPointTip",]
+
+mean(sites2$lat)
+mean(sites2$lon)
+
+# 42.61864
+#-80.28771
+#Note - mean location of wetlands
+
+
+
+
+
+####Get banding dataset in shape####
+
+banding <- read.csv("BANS_BANDING_DATA_2015_ADULTS_ONLY_FINAL_V2.csv")
+
+banding <- banding[banding$measured!="no",]
+#Note - get rid of two birds with no data.
+
+banding$release <- ymd_hms(paste(banding$year, banding$month, banding$day, banding$hour, banding$minute, 00), tz="America/New_York")
+
+banding$release <- with_tz(banding$release, tz="UTC")
+
+banding$last_day <- ymd_hms(paste(banding$year, banding$month_end_colony, banding$day_end_colony, 23, 59, 00), tz="America/New_York")
+
+banding$last_day <- with_tz(banding$last_day, tz="UTC")
+
+banding$ordinal_release <- yday(banding$release)
+
+banding$ordinal_last_day <- yday(banding$last_day)
+
+banding$sex <- ifelse(banding$sex==4, "M", "F")
+
+banding$days_tracked <- (banding$ordinal_last_day - banding$ordinal_release) + 1
+#Note - necessary so you can expand below.
+
+banding$colony <- banding$banding_site
+#Note - so you can merge with colony locations
+
+colony_locations <- read.csv("colony_locations.csv")
+#Note - csv you created for Dean
+
+banding <- merge(banding, colony_locations, by="colony", all.x=T)
+#Note - put it all together.  #Note - lat2 and lon2 are the banding colony locations.
+
+
+
+
+
+####Now create departure database####
+
+departure <- banding
+
+departure <- expandRows(departure, "days_tracked")
+#Note - make new dataset.
+
+departure$id <- departure$tag
+#Note - use id because used id in banding datasheet.
+
+individual <- unique(departure$id)
+
+group2 <- NULL
+
+for (i in 1:length(individual))
+{
+group1 <- departure[departure$id==individual[i],]
+group1$count <- seq(1:length(group1$id)) - 1
+group1$ordinal_date <- group1$count + group1$ordinal_release
+group2 <- rbind(group2, group1)
+}
+
+departure <- group2
+#Note - this gives you orginal date for each row of data
+
+departure$new_id <- paste(departure$ordinal_date, departure$id)
+#Note - because you need to merge with event data from morning and evenings.
+
+departure$count2 <- departure$count*(60*60*24)
+#Note - this is a counter for determining time of sunrise and sunset for a given evening.
+
+departure$date <- departure$release + departure$count2
+#Note - gives a date for getting twilight time for each row for each bird.  Used release, because always caught during day so no confusion with dates.
+
+departure$colony <- as.character(departure$colony)
+
+departure$colony <- ifelse(departure$id==222 & departure$ordinal_date>=163, "Bolin", departure$colony)
+departure$lat2 <- ifelse(departure$id==222 & departure$ordinal_date>=163, 42.62277, departure$lat2)
+departure$lon2 <- ifelse(departure$id==222 & departure$ordinal_date>=163, -80.7218, departure$lon2)
+#Note - bird that switched colony locations part way through season.
+
+departure <- departure[departure$id!=256 | departure$ordinal_date!=186 & departure$ordinal_date!=187 & departure$ordinal_date!=188 & departure$ordinal_date!=190 & departure$ordinal_date!=191,]
+#Note - this code and code below filters out birds that could not do evening commutes because they were away. 
+
+departure <- departure[departure$id!=124 | departure$ordinal_date!=174 & departure$ordinal_date!=175 & departure$ordinal_date!=178,] 
+
+departure <- departure[departure$id!=125 | departure$ordinal_date!=185 & departure$ordinal_date!=190,] 
+
+departure <- departure[departure$id!=255 | departure$ordinal_date!=178,] 
+
+departure <- departure[departure$id!=136 | departure$ordinal_date!=186,] 
+
+departure <- departure[departure$id!=135 | departure$ordinal_date!=160,] 
+
+departure <- departure[departure$id!=131 | departure$ordinal_date!=186,]
+
+departure <- departure[departure$id!=228 | departure$ordinal_date!=183,]
+
+departure <- departure[departure$id!=238 | departure$ordinal_date!=195 & departure$ordinal_date!=197 & departure$ordinal_date!=198 & departure$ordinal_date!=199 & departure$ordinal_date!=200,]
+
+departure <- departure[departure$id!=229 | departure$ordinal_date!=179,]
+
+departure <- departure[departure$id!=219 | departure$ordinal_date!=170 & departure$ordinal_date!=171 & departure$ordinal_date!=195 & 
+departure$ordinal_date!=196,]
+
+departure <- departure[departure$id!=218 | departure$ordinal_date!=198,]
+
+departure <- departure[departure$id!=214 | departure$ordinal_date!=179 & departure$ordinal_date!=192 & departure$ordinal_date!=195,]
+
+departure <- departure[departure$id!=223 | departure$ordinal_date!=176 & departure$ordinal_date!=177 & departure$ordinal_date!=178 & departure$ordinal_date!=179 & departure$ordinal_date!=180 & departure$ordinal_date!=181 & departure$ordinal_date!=182,]
+
+departure <- departure[departure$id!=222 | departure$ordinal_date!=174,]
+
+departure <- departure[departure$id!=224 | departure$ordinal_date!=171,]
+
+departure <- departure[departure$id!=221 | departure$ordinal_date!=178 & departure$ordinal_date!=179 & departure$ordinal_date!=182,]
+
+departure <- departure[departure$id!=132 | departure$ordinal_date!=178,]
+
+departure <- departure[departure$id!=239 | departure$ordinal_date!=172,]
+
+departure <- departure[departure$id!=244 | departure$ordinal_date!=183,]
+
+departure <- departure[departure$id!=242 | departure$ordinal_date!=181,]
+
+departure <- departure[departure$id!=126 | departure$ordinal_date!=186,]
+
+#Note - removed 46 evenings for 22 birds
+
+
+
+
+####Bring in tracking data for evening####
+
+evenings <- read.csv("evening_data_final.csv")
+
+evenings$ts <- as.POSIXct(evenings$tsOrig, origin = "1970-01-01",tz = "GMT")
+
+evenings$site <- as.character(evenings$site)
+
+evenings$ordinal_date <- yday(evenings$ts)
+
+evenings$date <- date(evenings$ts)
+evenings$year <- year(evenings$ts)
+evenings$month <- month(evenings$ts)
+evenings$day <- day(evenings$ts)
+evenings$hour <- hour(evenings$ts)
+evenings$minute <- minute(evenings$ts)
+#Note - separate out dates and times to adjust for UTC.
+
+#Note - twilight function below calculates time of sunset in GMT, for supplied date (GMT).  For example: if date = 2015-06-03 01:03:00 then sunset = 2015-#06-03 01:28:56.  If date = 2015-06-02 23:00:00, sunset would be 2016-06-02 01:26:34.  Therefore, if hour is before midnight, it will calculate twilight for #the evenign before.  To correct for this, you are adjusting the 'day' for all dates where departure timing is before midnight.  This is easy for all dates #except June 30th where you just can't add a day, but must both reset the day counter and add one to the month.  The code below works.     
+
+evenings$day_correction <- ifelse(evenings$hour >= 3 & evenings$month == 6 & evenings$day == 30, 1, 0)
+evenings$day <- ifelse(evenings$day_correction==1, evenings$day-29, evenings$day)
+evenings$month <- ifelse(evenings$day_correction==1, evenings$month + 1, evenings$month)
+#This isolates out those observatoins on June 30 where the time will get pushed into July 01 and peforms necessary correction for those measuremetns only.
+#Note - 11 is natural cutoff point.  Any times before 3 represent times shortly after midnight and time since sunset should use sunset time from the day #before.
+
+evenings$day <- ifelse(evenings$hour >= 3 & evenings$day_correction==0, evenings$day + 1, evenings$day)
+#Note - pushes all other days forward by one day where hour > 3 in order to get correct sunset time.
+
+evenings$ordinal_date <- ifelse(evenings$hour < 3, evenings$ordinal_date - 1, evenings$ordinal_date)
+#Note - yday uses the day in the date column to calculate ordinal date, so it changes at midnight.  This puts departures, arrivals, etc. into proper evening #if the observation occured after midnight.
+
+evenings$date_time_for_sunset <- ymd_hm(paste(evenings$year, evenings$month, evenings$day, evenings$hour, evenings$minute))
+#Note - make new date column to calculate sunset.
+
+evenings$twilight <- twilight(evenings$date_time_for_sunset, evenings$lon, evenings$lat, rise=F, zenith = 96, iters = 20)
+#Note - get timing of civil twilight.
+
+evenings$time_since_sunset <- difftime(evenings$ts, evenings$twilight, units="min")
+#Note - derive time of departure realtive to sunset.
+
+
+
+
+time_dep <- evenings[evenings$state=="departure",]
+
+mean(time_dep$time_since_sunset)
+median(time_dep$time_since_sunset)
+sd(time_dep$time_since_sunset)
+
+Time difference of -184.5316 mins
+> median(time_dep$time_since_sunset)
+Time difference of -99.69526 mins
+> sd(time_dep$time_since_sunset)
+[1] 193.3875
+
+plot(time_dep$time_since_sunset ~ time_dep$ts)
+
+time_arrival_evening <- evenings[evenings$state=="arrival" | evenings$state=="arrival_final",]
+
+mean(time_arrival_evening$time_since_sunset)
+median(time_arrival_evening$time_since_sunset)
+sd(time_arrival_evening$time_since_sunset)
+
+> mean(time_arrival_evening$time_since_sunset)
+Time difference of -56.75725 mins
+> median(time_arrival_evening$time_since_sunset)
+Time difference of -37.29484 mins
+> sd(time_arrival_evening$time_since_sunset)
+[1] 68.90479
+
+plot(time_arrival_evening$time_since_sunset ~ time_arrival_evening$ts)
+#Note - likely follows moon phase cycle.
+
+sleeptime <- evenings[evenings$state=="sleep time",]
+mean(sleeptime$time_since_sunset)
+median(sleeptime$time_since_sunset)
+sd(sleeptime$time_since_sunset)
+
+Time difference of -22.05492 mins
+> median(sleeptime$time_since_sunset)
+Time difference of -19.89459 mins
+> sd(sleeptime$time_since_sunset)
+[1] 29.99662
+
+plot(sleeptime$time_since_sunset ~ sleeptime$ts)
+
+
+
+
+evenings <- evenings[evenings$state=="arrival" | evenings$state=="arrival final",]
+evenings <- evenings[evenings$site!="Bolin" & evenings$site!="Hillman" & evenings$site!="Waterford", ]
+
+evenings$new_id <- paste(evenings$ordinal_date, evenings$id)
+
+evenings <- evenings[order(evenings$new_id, evenings$ordinal_date, evenings$state),]
+
+individual <- unique(evenings$new_id)
+
+group2 <- NULL
+
+for (i in 1:length(individual))
+{
+group1 <- evenings[evenings$new_id==individual[i],]
+group1 <- group1[length(group1$id),]
+group2 <- rbind(group2, group1)
+}
+
+evenings <- group2
+#Note - this takes the last observation for a given bird where you have multiple 'arrivals' or an 'arrival' and 'arrival final'.
+
+evenings <- evenings[,c(6,20,21,22)]
+
+names(evenings)[1] <- "state_evening"
+
+#Note - state, sunset, time_since_sunset, and new_id
+
+
+
+
+####Bring in tracking data for morning####
+
+morning <- read.csv("morning_data_final.csv")
+
+morning$ts <- as.POSIXct(morning$tsOrig, origin = "1970-01-01",tz = "GMT")
+
+morning$site <- as.character(morning$site)
+
+morning$ordinal_date <- yday(morning$ts)
+
+morning$sunrise <- twilight(morning$ts, morning$lon, morning$lat, rise=T, zenith = 96, iters = 20)
+#Note - get timing of civil twilight.
+
+morning$time_since_sunrise <- difftime(morning$ts, morning$sunrise, units="min")
+#Note - derive time of departure realtive to sunset.
+
+#morning <- morning[morning$time_since_sunrise<600 & morning$time_since_sunrise>-200,]
+
+
+
+
+time_dep <- morning[morning$state=="departure", ]
+table(time_dep$state, time_dep$site)
+time_dep <- time_dep[time_dep$site!="Rondeau",]
+
+mean(time_dep$time_since_sunrise)
+median(time_dep$time_since_sunrise)
+sd(time_dep$time_since_sunrise)
+
+> mean(time_dep$time_since_sunrise)
+Time difference of 40.74494 mins
+> median(time_dep$time_since_sunrise)
+Time difference of 29.7884 mins
+> sd(time_dep$time_since_sunrise)
+[1] 36.20538
+
+waketime <- morning[morning$state=="wake time",]
+table(morning$state, morning$site)
+waketime <- waketime[waketime$site!="WestPortBruce" & waketime$site!="Waterford" & waketime$site!="Bolin",]
+
+mean(waketime$time_since_sunrise)
+median(waketime$time_since_sunrise)
+sd(waketime$time_since_sunrise)
+
+Time difference of 20.47028 mins
+> median(waketime$time_since_sunrise)
+Time difference of 14.47907 mins
+> sd(waketime$time_since_sunrise)
+[1] 23.18696
+
+waketime2 <- morning[morning$state=="wake time",]
+table(morning$state, morning$site)
+waketime2 <- waketime2[waketime2$site=="WestPortBruce" | waketime2$site=="Waterford" | waketime2$site=="Bolin",]
+
+mean(waketime2$time_since_sunrise)
+median(waketime2$time_since_sunrise)
+sd(waketime2$time_since_sunrise)
+
+Time difference of 30.34828 mins
+> median(waketime2$time_since_sunrise)
+Time difference of 40.67427 mins
+> sd(waketime2$time_since_sunrise)
+[1] 30.30964
+
+time_arrival <- morning[morning$state=="arrival" | morning$state=="arrival final", ]
+
+mean(time_arrival$time_since_sunrise)
+median(time_arrival$time_since_sunrise)
+sd(time_arrival$time_since_sunrise)
+
+> mean(time_arrival$time_since_sunrise)
+Time difference of 109.9912 mins
+> median(time_arrival$time_since_sunrise)
+Time difference of 84.93053 mins
+> sd(time_arrival$time_since_sunrise)
+[1] 107.2225
+
+
+
+
+morning <- morning[morning$state=="departure",]
+
+morning$ordinal_date <- morning$ordinal_date - 1 
+#Note - evidence of previous evenings movement
+
+morning$new_id <- paste(morning$ordinal_date, morning$id)
+
+morning <- morning[order(morning$new_id, morning$ordinal_date),]
+
+individual <- unique(morning$new_id)
+
+group2 <- NULL
+
+for (i in 1:length(individual))
+{
+group1 <- morning[morning$new_id==individual[i],]
+group1 <- group1[length(group1$id),]
+group2 <- rbind(group2, group1)
+}
+
+morning <- group2
+
+morning <- morning[,c(6,13,14,15)]
+#Note - state, sunrise, time_since_sunrise, and new_id
+
+names(morning)[1] <- "state_morning"
+
+
+
+
+#####getting final database for analysis#####
+
+departure <- merge(departure, evenings, by="new_id", all.x=T)
+departure <- merge(departure, morning, by="new_id", all.x=T)
+
+departure$roost <- ifelse(is.na(departure$time_since_sunset)==T & is.na(departure$time_since_sunrise)==T, 0, 1) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+distance2 <- NULL
+for(i in 1:length(departure$id))
+{
+distance <- distm(c(-80.28771, 42.61864), c(departure$lon2[i], departure$lat2[i]), fun=distHaversine) 
+distance2 <- c(distance2, distance)
+}
+
+departure$distance <- distance2/1000
+#Note - distance of middle of wetland to each colony
+
+departure$twilight <- twilight(departure$date, departure$lon2, departure$lat2, rise=F, zenith = 96, iters = 20)
+#Note - departure date - is dummy date that increases with each row and represent time relative to release/banding.
+
+departure$time_since_sunset <- ifelse(is.na(departure$time_since_sunset)==T, -81.87508, departure$time_since_sunset)
+
+departure$time_departure <- departure$twilight + departure$time_since_sunset*60
+
+departure$hour_sunset <- hour(departure$time_departure)
+
+departure$time_departure <- ifelse(departure$hour_sunset<=2, departure$time_departure + (24*60*60), departure$time_departure)
+
+departure$time_departure <- as.POSIXct(departure$time_departure, origin = "1970-01-01",tz = "GMT")
+
+departure <- departure[order(departure$id, departure$ordinal_date),]
+
+group2 <- NULL
+for (i in 1:length(departure$id))
+{
+ group1 <- departure[i,]
+ group1$direction <- bearing(c(-80.28771, 42.61864),c(group1$lon2, group1$lat2))
+ group2 <- rbind(group2, group1)
+} 
+departure <- group2
+#Note - calculate flight direction.
+
+departure$direction <- departure$direction + 180
+
+departure$uwind <- NCEP.interp.surface('uwnd.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE, interp = 'IDW', p = 1, status.bar=TRUE)
+
+departure$vwind <- NCEP.interp.surface('vwnd.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE, interp = 'IDW', p = 1, status.bar=TRUE)
+
+test <- NCEP.Tailwind(u=departure$uwind, v=departure$vwind, direction=departure$direction, airspeed=NA)
+departure <- cbind(departure, test[,c(4,5)])
+
+departure$air_temp <- NCEP.interp.surface('air.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
+
+departure$precip <- NCEP.interp.surface('pr_wtr.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
+
+departure$precip_rate <- NCEP.interp.gaussian('prate.sfc',departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
+
+departure$cloud_cover <- NCEP.interp.gaussian('tcdc.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
+
+departure$temp <- departure$air_temp - 273
+
+
+
+
+####Models####
+
+model1 <- glmer(roost ~ distance + sex + ordinal_date + tailwind +  (1|id), departure, family="binomial")
+
+model1_mcmc <- glmmadmb(roost ~ distance + sex + ordinal_date + tailwind + temp + (1|id), data=departure, family="binomial", mcmc=T, mcmc.opts=mcmcControl(mcmc=50000))
+
+m <- as.mcmc(model1_mcmc$mcmc)
+library(scape)
+plotTrace(m)
+HPDinterval(m)
+t(apply(m,2,quantile,c(0.025,0.975)))
+
+ggplot(departure, aes(x=distance, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Distance to roost site (km)") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(25,90), breaks=c(30,40,50,60,70,80,90)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+
+ggplot(departure, aes(x=ordinal_date, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Ordinal date") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(150,200), breaks=c(150,160,170,180,190,200)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+
+ggplot(departure, aes(x=temp, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Air temperature (deg C)") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(15, 26), breaks=c(15,20,25,30)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+
+
+ggplot(departure, aes(x=tailwind, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Air temperature (deg C)") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(15, 26), breaks=c(15,20,25,30)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")

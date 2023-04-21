@@ -1,0 +1,140 @@
+---
+title: "roost_stats"
+output: pdf_document
+date: "2023-04-11"
+---
+
+```{r setup, include=FALSE}
+# Clear the R workspace environment
+rm(list=ls())
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = 'C:/Users/Manon/Documents/BIO8940 - Advanced Statistics/FinalProject') #set the working directory
+```
+
+
+```{r,include=FALSE}
+
+########### LOAD LIBRARIES AND PROCESS DATA FILES ##########
+
+#load data files on bank swallow movement
+#departure = read.csv("data/departure_dat.csv") #UNCOMMENT TO LOAD CLIMATE DATA AND RUN SECTION 1.1 TO PROCESS DATA
+depart_final = read.csv("data/departure_final.csv") #This is the processed dataset, which is the product of section 1.1 below (retrieving the NCEP climate data takes a long time for each variable - skip the climate data retrieving section 1.1 by using this dataset)
+
+depart_final_unscaled = depart_final
+
+#load necessary libraries
+library(lmerTest) #for glmer
+library(car) #for Anova
+library(RNCEP) #climate database
+library(suncalc) #moon phase/illumination package
+library(ggplot2) #for plotting
+library(dplyr) #for number of distinct individuals/ids
+library(effects) #for effects plots
+library(performance) #for diagnostic plots on glmer
+
+```
+
+
+``` {r, include=FALSE}
+############## Section 1.1:  CLIMATE VARIABLES FOR MOVEMENT DATA ########################
+
+# #PLEASE NOTE: RETRIEVING THE CLIMATE DATA TAKES ~1 HOUR PER VARIABLE - this code is included but can be skipped by loading the included data file "depart_final" - line 21
+# #IF YOU WISH TO RUN THE CODE BELOW PLEASE UNCOMMENT & LOAD THE FILE departure_dat.csv (LINE 20)
+
+# departure$uwind <- NCEP.interp.surface('uwnd.sig995', departure$lat2, departure$lon2, departure$time_departure, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE, interp = 'IDW', p = 1, status.bar=TRUE)
+
+# departure$vwind <- NCEP.interp.surface('vwnd.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE, interp = 'IDW', p = 1, status.bar=TRUE)
+
+# test <- NCEP.Tailwind(u=departure$uwind, v=departure$vwind, direction=departure$direction, airspeed=NA)
+
+
+# #get surface air temperature at the detected time and location of the bird (data interpolated between weather stations and between times)
+# departure$air_temp <- NCEP.interp.surface('air.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = FALSE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
+
+# # get precipitable water (total amount of ) (kg/m^2) in the air at time of detection - same interpolation
+# departure$precip <- NCEP.interp.surface('pr_wtr.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
+
+# departure$precip_rate <- NCEP.interp.gaussian('prate.sfc',departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
+
+# #Get cloud cover for location of bird detection - same interpolation
+# departure$cloud_cover <- NCEP.interp.gaussian('tcdc.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
+
+# departure$uwind <- NCEP.interp.surface('uwnd.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE, interp = 'IDW', p = 1, status.bar=TRUE)
+
+# departure$vwind <- NCEP.interp.surface('vwnd.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = FALSE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE, interp = 'IDW', p = 1, status.bar=TRUE)
+
+# # convert air temperature from Kelvin to degrees Celsius
+# departure$temp <- departure$air_temp - 273
+# 
+# #get lunar illumination (fraction of the moon that is illuminated) and moon phase at the time the bird was observed (movement to roost could be linked to availability of light)
+# departure$moon = getMoonIllumination(departure$time_departure,keep=c("fraction","phase"))
+# 
+# # create a variable for sky illumination by combining cloud cover and illumination of the moon (moon fraction) --> a full moon has a moon fraction of 1; illum will be maximum (100%) when the moon is full and cloud cover is 0
+#departure$illum = departure$moon.fraction*(100-departure$cloud_cover)
+
+# # assign the final, processed database to depart_final
+# depart_final = departure
+
+
+```
+
+
+```{r, echo=FALSE}
+
+####################### SECTION 1.2 EXPLORE VARIABLES #############################
+usethis::use_git()
+ggplot(depart_final, aes(x=distance, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Distance to roost site (km)") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(25,90), breaks=c(30,40,50,60,70,80,90)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+ggplot(depart_final_unscaled, aes(x=ordinal_date, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Ordinal date") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(150,200), breaks=c(150,160,170,180,190,200)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+
+ggplot(depart_final, aes(x=temp, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Air temperature (deg C)") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(15,20,25,30)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+ggplot(depart_final, aes(x=precip, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Precipitable water (kg/m^2)") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(10,20, 30, 40, 50)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+ggplot(depart_final, aes(x=precip_rate, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Precipitation rate (kg/m^2/s") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+
+ggplot(depart_final, aes(x=cloud_cover, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Cloud cover") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+ggplot(depart_final, aes(x=moon.fraction, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Moon illumination (%)") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+ggplot(depart_final, aes(x=moon.phase, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Moon phase") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous() + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+ggplot(depart_final, aes(x=illum, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Sky illumination (%)") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+
+
+
+################## 
+
+
+```
+
+
+``` {r}
+
+depart_final$id = as.factor(depart_final$id) #make the individual ID read as a factor, not integer
+depart_final <- depart_final_unscaled %>%
+  mutate(
+    ordinal_date = scale(ordinal_date),
+    distance = scale(distance)
+  )
+
+m <- glmer(roost ~ distance + distance^2 + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=depart_final, family="binomial")
+
+#examine diagnostic plots
+check_model(m) #appears to be overdispersed, try quasi-binomial
+plot(m)
+
+Anova(m,type=3)
+summary(m)
+effects_m =allEffects(m)
+plot(allEffects(m))
+vif(m)
+
+
+
+mq <- glmer(roost ~ distance + distance^2 + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=depart_final, family="quasibinomial")
+
+```

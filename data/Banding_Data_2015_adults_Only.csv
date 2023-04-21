@@ -1,0 +1,56 @@
+band_number,species_code,age,sex,fat,wing,weight,hour,minute,initials,day,month,year,banding_site,band size,notes,tag,detected_Motus,measured,Notes,day_end_breeding,month_end_breeding,type,end_date_checked,day_end_colony,month_end_colony
+258011001,BANS,1,5,1,97,14.4,8,40,JJP,5,6,2015,Bossuyt,0,tag id = 233; 5/6 eggs,233,yes,yes,checked dates,24,6,lake,yes,24,6
+258011002,BANS,1,5,3,102,14.3,8,40,JJP,5,6,2015,Bossuyt,0,tag id = 228; nestlings,228,yes,yes,checked dates,28,6,lake,yes,3,7
+258011003,BANS,1,5,3,97,15.4,10,50,JJP,5,6,2015,Hawk Cliff,0,tag id = 235; nestlings just hatched,235,yes,yes,checked dates,29,6,lake,yes,28,6
+258011005,BANS,1,4,1,96,13.6,11,50,JJP,5,6,2015,Hawk Cliff,0,tag id = 227; 3/4 nestlings,227,yes,yes,checked dates,4,7,lake,yes,4,7
+258011006,BANS,1,4,3,96,14.5,12,50,JJP,5,6,2015,Hawk Cliff,0,tag id = 230; 5 eggs,230,yes,yes,checked dates,20,6,lake,yes,20,6
+258011007,BANS,1,5,2,99,15.3,12,50,JJP,5,6,2015,Hawk Cliff,0,tag id = 229; 4 eggs; 1 nestling,229,yes,yes,checked dates,3,7,lake,yes,3,7
+25801101,BANS,1,4,3,96,13.1,14,30,GWM,10,6,2015,Blythedale,0,tag id = 231; 4 nestlings,231,no,yes,NA,24,6,pit,yes,24,6
+258011012,BANS,1,5,2,99,12.2,14,30,GWM,10,6,2015,Blythedale,0,tag id = 236; 4 nestlings,236,no,yes,NA,30,6,pit,yes,30,6
+243050889,BANS,1,5,2,99,14.1,7,39,MF,2,6,2015,Bolin,0,TAG#256,256,yes,yes,double checked,29,6,lake,yes,11,7
+243050892,BANS,1,4,1,97,13.6,7,39,MF,2,6,2015,Bolin,0,TAG#122,122,yes,yes,double checked,2,7,lake,yes,5,7
+243050893,BANS,1,4,2,100,14.5,7,39,MF,2,6,2015,Bolin,0,TAG#121,121,yes,yes,double checked,3,7,lake,yes,8,7
+243050894,BANS,1,5,4,96,15,7,39,MF,2,6,2015,Bolin,0,TAG#124,124,yes,yes,double checked,21,6,lake,yes,29,6
+243050896,BANS,1,4,1,101,15,11,15,MF,2,6,2015,Allensen,0,"TAG#255, 3 young",255,yes,yes,double checked,23,6,lake,yes,28,6
+243050897,BANS,1,4,2,102,13.9,11,15,MF,2,6,2015,Allensen,0,TAG#125,125,yes,yes,double checked,28,6,lake,yes,10,7
+243050904,BANS,1,4,1,95,13.5,7,0,MF,3,6,2015,Bossuyt,0,tracker 128 4th caught,128,yes,yes,checked dates,30,6,lake,yes,13,7
+243050907,BANS,1,4,2,97,13.9,8,20,MF,3,6,2015,Crosby,0,"1/2 day old chicks, tracker 127",127,yes,yes,checked dates,4,7,lake,yes,4,7
+243050908,BANS,1,5,3,99,16.3,8,20,MF,3,6,2015,Crosby,0,"5 eggs, tracker 130",130,yes,yes,checked dates,2,7,lake,yes,2,7
+243050910,BANS,1,4,0,96,13.7,8,20,MF,3,6,2015,Crosby,0,"5 egs, tracker 129",129,yes,yes,checked dates,4,7,lake,yes,4,7
+243050912,BANS,1,4,0,109,12.6,10,30,MF,3,6,2015,Hayhoe,0,tracker 133,133,yes,yes,checked dates,20,6,lake,yes,30,6
+243050913,BANS,1,4,0,104,15.3,10,30,MF,3,6,2015,Hayhoe,0,"2 eggs + 3? Hatchlings, tracker 135",135,yes,yes,checked dates,26,6,lake,yes,8,7
+243050914,BANS,1,5,3,100,14.4,10,30,MF,3,6,2015,Hayhoe,0,"just hatched, tracker 131",131,yes,yes,checked dates,28,6,lake,yes,6,7
+243050919,BANS,1,5,2,98,14,10,30,MF,3,6,2015,Hayhoe,0,tracker 139,139,yes,yes,checked dates,22,6,lake,yes,6,7
+243050922,BANS,1,5,3,103,14.7,1,0,MF,3,6,2015,Allensen,0,hatchlings tracker 134,134,yes,yes,double checked,21,6,lake,yes,23,6
+243050923,BANS,1,5,3,102,15.2,1,0,MF,3,6,2015,Allensen,0,hatchlings tracker 123,123,yes,yes,double checked,9,7,lake,yes,14,7
+243050924,BANS,1,5,4,97,14.7,1,0,MF,4,6,2015,Thamesford,0,tracker 136,136,yes,yes,double checked; looks like really put out at thamesford,5,7,pit,yes,6,7
+243050925,BANS,1,4,1,95,12.9,1,0,MF,4,6,2015,Thamesford,0,tracker 213,213,yes,yes,double checked; Looks like really put out at Thamesford.,5,7,pit,yes,2,7
+243050926,BANS,1,4,1,100,13,8,50,MF,4,6,2015,Thamesford,0,tracker 243,243,yes,yes,checked dates,6,7,pit,yes,6,7
+243050930,BANS,1,5,2,99,13,8,50,MF,4,6,2015,Thamesford,0,tracker 254,254,no,no,NA,NA,NA,pit,yes,NA,NA
+243050932,BANS,1,5,2,99,14.5,10,0,MF,4,6,2015,Embro,0,tracker 216,216,yes,yes,checked dates,4,7,pit,yes,4,7
+243050933,BANS,1,4,1,103,12.9,10,0,MF,4,6,2015,Embro,0,tracker 215,215,yes,yes,checked dates,9,7,pit,yes,9,7
+243050935,BANS,1,4,2,98,13.9,10,0,MF,4,6,2015,Embro,0,tracker 137,137,yes,yes,checked dates,4,7,pit,yes,4,7
+243050944,BANS,1,5,3,102,15.1,1,30,JJP,4,6,2015,Blythedale,0,tracker 140,140,maybe,no,NA,NA,NA,pit,yes,NA,NA
+243050947,BANS,1,5,4,96,13.9,1,30,MF,4,6,2015,Blythedale,0,tracker 138,138,yes,yes,checked dates,2,7,pit,yes,2,7
+243050948,BANS,1,5,3,98,13,9,26,MF,5,6,2015,Simcoe,0,"tracker 226, day old chicks",226,yes,yes,checked dates,29,6,pit,yes,29,6
+243050949,BANS,1,4,0,102,13.5,10,0,BS,5,6,2015,Simcoe,0,"tracker 214, day old chicks",214,yes,yes,checked dates,2,7,pit,yes,19,7
+243050951,BANS,1,5,2,102,13.9,10,40,MF,5,6,2015,Simcoe,0,"tracker 223, unknown burrow, bp=late incubator",223,yes,yes,checked dates,24,6,pit,yes,5,7
+243050952,BANS,1,5,3,95,14,10,40,MF,5,6,2015,Simcoe,0,"tracker 222, chicks 4-5 days old",222,yes,yes,checked dates,22,6,pit,yes,23,6
+243050954,BANS,1,5,3,97,15.3,11,15,MF,5,6,2015,Waterford,0,"tracker 220, 2 eggs, bp=early",220,yes,yes,double checked,17,6,pit,yes,17,6
+243050955,BANS,1,5,3,100,15.4,11,15,MF,5,6,2015,Waterford,0,"tracker 224, 4 eggs, bp=early",224,yes,yes,double checked,23,6,pit,yes,23,6
+243050956,BANS,1,4,1,101,12.8,11,15,MF,5,6,2015,Waterford,0,"tracker 212, can't see",212,yes,yes,double checked,8,7,pit,yes,8,7
+243050957,BANS,1,5,2,95,14,11,15,MF,5,6,2015,Waterford,0,"tracker 225, 2 eggs, bp=early",225,yes,yes,double checked,8,7,pit,yes,8,7
+243050961,BANS,1,4,0,97,13.1,11,15,MF,5,6,2015,Waterford,0,"tracker 221, young 3-4 days",221,yes,yes,double checked,26,6,pit,yes,2,7
+243050962,BANS,1,5,4,95,14.1,11,15,MF,5,6,2015,Waterford,0,TF # 132 young 2-3 days,132,yes,yes,checked dates,26,6,pit,yes,26,6
+243050966,BANS,1,4,3,101,12.7,8,0,GWM,8,6,2015,Zegers,0,"#2 nestling 1-4 days, tag 234",234,yes,yes,checked dates,3,7,lake,yes,3,7
+243050968,BANS,1,5,4,102,15.8,8,0,GWM,8,6,2015,Zegers,0,#4 2 nestlings tag 219,219,yes,yes,checked dates,18,7,lake,yes,18,7
+243050971,BANS,1,5,3,96,13.5,8,0,GWM,8,6,2015,Zegers,0,"#7 nestling broken eggs, tag 218",218,yes,yes,checked dates,16,7,lake,yes,18,7
+243050974,BANS,1,4,1,98,11.8,9,30,GWM,8,6,2015,Zegers,0,"#11 hatching nestlings, tag 217",217,yes,yes,checked dates,8,7,lake,yes,9,7
+243050975,BANS,1,4,0,102,14.3,11,0,JK,8,6,2015,Kingswood,0,"#1 tag 232, 5 eggs",232,yes,yes,checked dates,14,7,lake,yes,20,7
+243050976,BANS,1,5,4,103,15.7,11,0,JK,8,6,2015,Kingswood,0,"#2 eggs, tag 238",238,yes,yes,checked dates,12,7,lake,yes,20,7
+243050977,BANS,1,5,3,95,14.5,11,0,JK,8,6,2015,Kingswood,0,"#3 tag 237, bp=mid inc",237,yes,yes,Last day is morning of July 07; bird dead or radio off around July 09 when constant signal received.  No detection on July 08.,6,7,lake,yes,6,7
+243050985,BANS,1,4,0,100,13,9,4,KG,12,6,2015,Cultus,0,"#1 tag 253, 5 eggs",253,yes,yes,Went missing after about a week.,20,6,pit,yes,20,6
+243050987,BANS,1,5,4,102,15.8,9,18,JK,12,6,2015,Cultus,0,"#2 tag 244, 4 eggs",244,yes,yes,checked dates,7,7,pit,yes,2,7
+243050988,BANS,1,4,0,95,13.3,9,31,JK,12,6,2015,Cultus,0,"#3 tag 242, 4+ eggs",242,yes,yes,checked dates,6,7,pit,yes,5,7
+243050989,BANS,1,5,0,97,13.2,9,41,KR,12,6,2015,Cultus,0,"tag 239, unknown nest, good bp",239,yes,yes,checked dates,23,6,pit,yes,29,6
+243050909,BANS,1,5,2,98,13.8,8,20,MF,3,6,2015,Crosby,0,"5 eggs, tracker 126",126,yes,yes,checked dates,5,7,lake,yes,6,7
