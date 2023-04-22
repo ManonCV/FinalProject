@@ -11,11 +11,15 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = 'C:/Users/Manon/Documents/BIO8940 - Advanced Statistics/FinalProject') #set the working directory
 
 ```
-
+## BIO8940 Final Project
+### Bank swallow movements to roosting habitat
+### By: Manon Veselovsky - 8259387
+### Introduction:
+### 
 
 ```{r,include=FALSE}
 
-########### LOAD LIBRARIES AND PROCESS DATA FILES ##########
+########### LOAD DATA FILES AND LIBRARIES ##########
 
 # #load data files on bank swallow movement
 #departure = read.csv("data/departure_dat.csv") #UNCOMMENT TO LOAD CLIMATE DATA AND RUN SECTION 1.1 TO PROCESS DATA
@@ -45,38 +49,31 @@ library(tidyverse) #for data management/processing
 # #IF YOU WISH TO RETRIEVE THE CLIMATE DATA YOURSELF BELOW PLEASE UNCOMMENT & LOAD THE FILE departure_dat.csv (LINE 21) AND UNCOMMENT THE SECTION BELOW
 
 
-# #get surface air temperature at the detected time and location of the bird (data interpolated between weather stations and between times)
+# # get surface air temperature at the detected time and location of the bird (data interpolated between weather stations and between times)
 # departure$air_temp <- NCEP.interp.surface('air.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = FALSE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
 
 # # get precipitable water (total amount) (kg/m^2) in the air at time of detection - same interpolation
 # departure$precip <- NCEP.interp.surface('pr_wtr.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
 
-# get the precipitation rate for 6 hours after the departure time (kg/m^2/s, equivalent to mm/s); same interpolation
+# # get the precipitation rate for 6 hours after the departure time (kg/m^2/s, equivalent to mm/s); same interpolation
 # departure$precip_rate <- NCEP.interp.gaussian('prate.sfc',departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
 
-# #Get total cloud cover, in %, for the location of bird detection - same interpolation
+# # Get total cloud cover, in %, for the location of bird detection - same interpolation
 # departure$cloud_cover <- NCEP.interp.gaussian('tcdc.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
 
-# get the East-West wind component
+# # get the East-West wind component
 # departure$uwind <- NCEP.interp.surface('uwnd.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE, interp = 'IDW', p = 1, status.bar=TRUE)
 
-# Get the North/South wind component
+# #Get the North/South wind component
 # departure$vwind <- NCEP.interp.surface('vwnd.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = FALSE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE, interp = 'IDW', p = 1, status.bar=TRUE)
 
 # # assign the final, processed database to depart_final
 # depart_final = departure
 
-
-
-
 ```
 
 ```{r}
-#################### SECTION 1.2 VARIABLE MODIFICATIONS + SCALING ################
-
-#remove rows with NA for distance
-nas_dropped = depart_final
-nas_dropped = nas_dropped[complete.cases(df[ , c('distance')])]
+#################### SECTION 1.2 VARIABLE MODIFICATIONS + SCALED DATABASE ################
 
 # convert air temperature from Kelvin to degrees Celsius
 depart_final$temp <- depart_final$air_temp - 273
@@ -94,45 +91,20 @@ depart_final$precip_mmh = depart_final$precip_rate*60*60
 depart_final$id = as.factor(depart_final$id)
 
 #set up a scaled database
-depart_final_scaled <- depart_final %>%
-  mutate(
-    ordinal_date = scale(ordinal_date),
-    distance = scale(distance)
-  )
+df.scale = standardize(depart_final,select=c("distance","ordinal_date"))
 
 ```
 
 
 ```{r, echo=FALSE}
 
-####################### SECTION 1.2 EXPLORE VARIABLES #############################
-# fits = predict(m, depart_final,  se.fit = TRUE, type = 'response')
-# 
-# all
-# df=depart_final
-# 
-# df$prediction <- exp(fits$fit) 
-# df$upper <- exp(fits$fit + 1.96 * fits$se.fit)
-# df$lower <- exp(fits$fit - 1.96 * fits$se.fit)
-# 
-# ggplot(depart_final, aes(distance, roost)) +
-#   geom_errorbar(aes(ymin = lower, ymax = upper, colour = wantsMore), 
-#                 width = 0.25, size = 1, position = position_dodge(width = 0.4)) +
-#   geom_point(aes(fill = wantsMore), shape = 21, size = 3, 
-#              position = position_dodge(width = 0.4)) +
-#   facet_grid(~education) +
-#   theme_light(base_size = 16) +
-#   scale_y_continuous(name = "Probability of roosting", limits = c(0, 1),
-#                      labels = scales::percent)
-
+####################### SECTION 1.3 EXPLORE VARIABLES #############################
 
 # Plot the probability of roosting in the wetland complex against the distance from the colony to the wetland complex
 ggplot(depart_final, aes(x=distance, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Distance to roost site (km)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(25,90), breaks=c(30,40,50,60,70,80,90)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
 
 # Plot the probability of roosting in the wetland complex against the ordinal date in the season
 ggplot(depart_final, aes(x=ordinal_date, y=roost)) + facet_grid(~sex) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Ordinal date") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(150,200), breaks=c(150,160,170,180,190,200)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
-
-
 
 # Plot the probability of roosting in the wetland complex against the surface air temperature
 ggplot(depart_final, aes(x=temp, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Air temperature (deg C)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(15,20,25,30)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
@@ -163,16 +135,18 @@ ggplot(depart_final, aes(x=illum, y=roost)) + geom_point(size=4, alpha=0.5, colo
 
 
 ``` {r}
-
-m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=depart_final_scaled, family="binomial",na.action=na.omit)
-
-#requires scaling and centering
-df.scale = standardize(depart_final,select=c("distance","ordinal_date"))
-m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale_nas, family="binomial",na.action=na.omit)
+m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=depart_final, family="binomial",na.action=na.omit)
+```
 
 
-#examine diagnostic plots
-check_model(m)
+``` {r}
+m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
+
+
+#examine
+checked = check_model(m)
+checked
+
 # performance::binned_residuals(m, term='ordinal_date')
 # performance::binned_residuals(m, term='distance')
 # performance::binned_residuals(m, term='moon.phase')
@@ -182,11 +156,25 @@ check_model(m)
 testDispersion(m) 
 dharm_output = simulateResiduals(fittedModel=m,plot = F)
 plot(dharm_output)
-plotResiduals(dharm_output, form=df.scale_nas$distance)
-plotResiduals(dharm_output, form=df.scale_nas$ordinal_date)
-plotResiduals(dharm_output, form=df.scale_nas$sex)
-plotResiduals(dharm_output, form=df.scale_nas$id)
-plotResiduals(dharm_output, form=df.scale_nas$colony)
+plotResiduals(dharm_output, form=df.scale$distance) #some overdispersion but not bad, indicates possible non-linear relationship with distance
+plotResiduals(dharm_output, form=df.scale$ordinal_date)
+plotResiduals(dharm_output, form=df.scale$sex)
+plotResiduals(dharm_output, form=df.scale$id)
+plotResiduals(dharm_output, form=df.scale$colony)
+
+#see if transformation to distance helps fit - appears to be a -ve exponential relationship from ggplot in section 1.2
+
+m_neg = glmer(roost ~ exp(-distance) + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
+dharm_output_neg = simulateResiduals(fittedModel=m_neg,plot = F)
+plotResiduals(dharm_output_neg, form=df.scale$distance) 
+
+m_exp = glmer(roost ~ exp(distance) + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
+dharm_output = simulateResiduals(fittedModel=m_exp,plot = F)
+plotResiduals(dharm_output_exp, form=df.scale$distance) 
+
+m_sqrd = glmer(roost ~ distance+I(distance^2) + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
+plotResiduals(simulateResiduals(fittedModel=m_sqrd,plot = F), form=df.scale$distance)
+
 
 Anova(m,type=3)
 Anova(m_scaled,type=3)
