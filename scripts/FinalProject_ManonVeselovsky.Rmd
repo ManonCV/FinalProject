@@ -1,7 +1,12 @@
 ---
 title: "Advanced Stats - Bank Swallow Movement"
-output: pdf_document
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+  pdf_document: default
 date: "2023-04-24"
+
 ---
 
 ```{r setup, include=FALSE}
@@ -15,7 +20,7 @@ knitr::opts_knit$set(root.dir = 'C:/Users/Manon/Documents/BIO8940 - Advanced Sta
 ### Bank swallow movements to roosting habitat
 ### By: Manon Veselovsky - 8259387
 ### Introduction:
-### 
+#### 
 
 ```{r,include=FALSE}
 
@@ -97,9 +102,9 @@ scale_dist = scale(depart_final$distance)
 scaleList_dist <- list(scale = attr(scale_dist, "scaled:scale"),
     center = attr(scale_dist, "scaled:center"))
 
-scale_orddate = scale(depart_final$ordinal_date)
-scaleList_orddate = list(scale = attr(scale_dist, "scaled:scale"),
-    center = attr(scale_dist, "scaled:center"))
+scale_date = scale(depart_final$ordinal_date)
+scaleList_date = list(scale = attr(scale_date, "scaled:scale"),
+    center = attr(scale_date, "scaled:center"))
 
 ```
 
@@ -134,7 +139,19 @@ ggplot(depart_final, aes(x=moon.phase, y=roost)) + geom_point(size=4, alpha=0.5,
 ggplot(depart_final, aes(x=illum, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Sky illumination (%)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
 
 
+ggplot(depart_final) + 
+  aes(ordinal_date, roost) +
+  geom_col() +facet_grid(~sex)+
+  scale_fill_identity(guide = "legend")+
+  ylab("Count of birds roosting")+
+  xlab("Ordinal date")
 
+# ggplot(depart_final) +
+#   aes(sex, roost) +
+#   geom_col() +
+#   scale_fill_identity(guide = "legend")+
+#   ylab("Count of birds roosting")+
+#   xlab("Sex")
 
 ################## 
 
@@ -169,22 +186,42 @@ plotResiduals(dharm_output, form=df.scale$colony) #some issues but not terrible 
 
 #sqrt 
 m_exp = glmer(roost ~ exp(distance) + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
-plotResiduals(simulateResiduals(fittedModel=m_exp,plot = F), form=df.scale$distance) #fit not much better
+plotResiduals(simulateResiduals(fittedModel=m_exp,plot = F), form=df.scale$distance) #fit is not much better
 
 #neg exponential
 m_neg = glmer(roost ~ exp(-distance) + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit) 
-plotResiduals(simulateResiduals(fittedModel=m_neg,plot = F), form=df.scale$distance) #fit worse
+plotResiduals(simulateResiduals(fittedModel=m_neg,plot = F), form=df.scale$distance) #fit is worse
 
 #polynomial
 m_sqrd = glmer(roost ~ distance+I(distance^2) + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
 plotResiduals(simulateResiduals(fittedModel=m_sqrd,plot = F), form=df.scale$distance) #fit is about the same
 
-scaleList
+
 Anova(m,type=3)
-Anova(m_scaled,type=3)
+summary(m)
+df.scale$dist_logit_ypred <- -2.489848 -2.019687*df.scale$distance
+df.scale$dist_logit_upper = df.scale$dist_logit_ypred+0.383874*2
+df.scale$dist_logit_lower = df.scale$dist_logit_ypred-0.383874*2
+
+depart_final$dist_ypred <- exp(df.scale$dist_logit_ypred) / (1 + exp(df.scale$dist_logit_ypred))
+depart_final$dist_upper <- exp(df.scale$dist_logit_upper) / (1 + exp(df.scale$dist_logit_upper))
+depart_final$dist_lower = exp(df.scale$dist_logit_lower) / (1 + exp(df.scale$dist_logit_lower))
+
+plot(roost ~  jitter(distance), depart_final) + points(depart_final$distance, depart_final$dist_ypred, col="red", type = "l", lwd = 2)
+
+ggplot(depart_final,aes(distance,dist_ypred,
+               ymin=dist_lower,ymax=dist_upper,legend="FALSE",
+               ))+
+     geom_line()+theme(legend.position="none")+
+     geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("Distance to roost site (km)")+
+     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))
+
+
+str(m)
 summary(m)
 effects_m =allEffects(m)
-
+str(effects_m)
+plot(effects_m$illum)
 
 effect_dist = as.data.frame(effects_m$distance)
 effect_dist_unscaled = effect_dist
@@ -197,19 +234,20 @@ ggplot(effect_dist_unscaled,aes(distance,fit,
      geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("Distance to roost site (km)")+
      geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))
 
-effect_date = as.data.frame(effects_m$ordinal_date)
-effect_orddate_unscaled = as.data.frame(effects_m$ordinal_date)
-effect_ordsex_unscaled$'sex:ordinal_date' = effect_ordsex$'sex:ordinal_date'*scaleList_orddate$scale + scaleList_orddate$center
-effect_ordsex_unscaled
+plot(effects_m$'sex:ordinal_date')
+str(effects_m$'sex:ordinal_date'$fit)
+effect_date = as.data.frame(effects_m$'sex:ordinal_date')
+effect_date_unscaled = effect_date
+effect_date_unscaled$ordinal_date = effect_date$ordinal_date*scaleList_date$scale + scaleList_date$center
+effect_date_unscaled
 
+ggplot(effect_date_unscaled,aes(ordinal_date,fit,
+               ymin=lower,ymax=upper,legend="FALSE",
+               color = sex))+
+     geom_line()+theme(legend.position="right")+
+     geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("Ordinal date")+facet_grid(~sex)+
+     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))
 
-
-mean(depart_final$distance)
-scaleList
-print(distance_effect_unscaled)
-effects_m
-table_effects = summary(m)
-str(table_effects)
 
 str(effects_m)
 plot(effect("distance",m))
