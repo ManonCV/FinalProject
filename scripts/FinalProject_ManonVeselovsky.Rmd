@@ -90,8 +90,16 @@ depart_final$precip_mmh = depart_final$precip_rate*60*60
 # make bird ID read as a factor, not integer
 depart_final$id = as.factor(depart_final$id)
 
-#set up a scaled database
+#set up a scaled database using standardize from data_wizard (reduces problems in glmer compared to scale())
 df.scale = standardize(depart_final,select=c("distance","ordinal_date"))
+
+scale_dist = scale(depart_final$distance)
+scaleList_dist <- list(scale = attr(scale_dist, "scaled:scale"),
+    center = attr(scale_dist, "scaled:center"))
+
+scale_orddate = scale(depart_final$ordinal_date)
+scaleList_orddate = list(scale = attr(scale_dist, "scaled:scale"),
+    center = attr(scale_dist, "scaled:center"))
 
 ```
 
@@ -135,54 +143,78 @@ ggplot(depart_final, aes(x=illum, y=roost)) + geom_point(size=4, alpha=0.5, colo
 
 
 ``` {r}
-m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=depart_final, family="binomial",na.action=na.omit)
+m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + illum + (1|colony/id), data=depart_final, family="binomial",na.action=na.omit)
 ```
 
 
 ``` {r}
-m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
+# model has problems using unscaled data, use df.scale (df where distance and ordinal date were scaled and centered)
+m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + illum + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
 
-
-#examine
-checked = check_model(m)
-checked
-
-# performance::binned_residuals(m, term='ordinal_date')
-# performance::binned_residuals(m, term='distance')
-# performance::binned_residuals(m, term='moon.phase')
-
+#examine normality of random variables (other plots form this function are problematic with binomial models)
+check_model(m,check="normality")
+check_model(m)
 
 #check for over/under dispersion using DHARMa
-testDispersion(m) 
+testDispersion(m) #looks fine
 dharm_output = simulateResiduals(fittedModel=m,plot = F)
-plot(dharm_output)
-plotResiduals(dharm_output, form=df.scale$distance) #some overdispersion but not bad, indicates possible non-linear relationship with distance
-plotResiduals(dharm_output, form=df.scale$ordinal_date)
-plotResiduals(dharm_output, form=df.scale$sex)
-plotResiduals(dharm_output, form=df.scale$id)
-plotResiduals(dharm_output, form=df.scale$colony)
+plot(dharm_output) #this looks fine although the lack of deviation is weird - not much can be gathered from the overall residuals in a binomial model anyways - check individual variables
+plotResiduals(dharm_output, form=df.scale$distance) #some overdispersion but not terrible, indicates possible non-linear relationship with distance
+plotResiduals(dharm_output, form=df.scale$ordinal_date) #fine
+plotResiduals(dharm_output, form=df.scale$sex) #fine
+plotResiduals(dharm_output, form=df.scale$id) #some issues but not terrible
+plotResiduals(dharm_output, form=df.scale$colony) #some issues but not terrible again
 
-#see if transformation to distance helps fit - appears to be a -ve exponential relationship from ggplot in section 1.2
+#see if transformation to distance helps fit - appears to be a log relationship but cannot take log of my distance variable (produces NAs and unscaled data does not converge) - try negative exponential, sqrt, adding a polynomial term
 
-m_neg = glmer(roost ~ exp(-distance) + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
-dharm_output_neg = simulateResiduals(fittedModel=m_neg,plot = F)
-plotResiduals(dharm_output_neg, form=df.scale$distance) 
-
+#sqrt 
 m_exp = glmer(roost ~ exp(distance) + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
-dharm_output = simulateResiduals(fittedModel=m_exp,plot = F)
-plotResiduals(dharm_output_exp, form=df.scale$distance) 
+plotResiduals(simulateResiduals(fittedModel=m_exp,plot = F), form=df.scale$distance) #fit not much better
 
+#neg exponential
+m_neg = glmer(roost ~ exp(-distance) + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit) 
+plotResiduals(simulateResiduals(fittedModel=m_neg,plot = F), form=df.scale$distance) #fit worse
+
+#polynomial
 m_sqrd = glmer(roost ~ distance+I(distance^2) + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
-plotResiduals(simulateResiduals(fittedModel=m_sqrd,plot = F), form=df.scale$distance)
+plotResiduals(simulateResiduals(fittedModel=m_sqrd,plot = F), form=df.scale$distance) #fit is about the same
 
-
+scaleList
 Anova(m,type=3)
 Anova(m_scaled,type=3)
 summary(m)
 effects_m =allEffects(m)
-plot(allEffects(m))
-vif(m)
 
+
+effect_dist = as.data.frame(effects_m$distance)
+effect_dist_unscaled = effect_dist
+effect_dist_unscaled$distance = effect_dist$distance*scaleList_dist$scale + scaleList_dist$center
+effect_dist_unscaled
+ggplot(effect_dist_unscaled,aes(distance,fit,
+               ymin=lower,ymax=upper,legend="FALSE",
+               ))+
+     geom_line()+theme(legend.position="none")+
+     geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("Distance to roost site (km)")+
+     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))
+
+effect_date = as.data.frame(effects_m$ordinal_date)
+effect_orddate_unscaled = as.data.frame(effects_m$ordinal_date)
+effect_ordsex_unscaled$'sex:ordinal_date' = effect_ordsex$'sex:ordinal_date'*scaleList_orddate$scale + scaleList_orddate$center
+effect_ordsex_unscaled
+
+
+
+mean(depart_final$distance)
+scaleList
+print(distance_effect_unscaled)
+effects_m
+table_effects = summary(m)
+str(table_effects)
+
+str(effects_m)
+plot(effect("distance",m))
+vif(m)
+mean()
 ```
 
 ```{r, echo=FALSE}
