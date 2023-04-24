@@ -9,6 +9,8 @@ date: "2023-04-24"
 
 ---
 
+
+
 ```{r setup, include=FALSE}
 # Clear the R workspace environment
 rm(list=ls())
@@ -19,9 +21,14 @@ knitr::opts_knit$set(root.dir = 'C:/Users/Manon/Documents/BIO8940 - Advanced Sta
 ## BIO8940 Final Project
 ### Bank swallow movements to roosting habitat
 ### By: Manon Veselovsky - 8259387
-### Introduction:
+## Introduction:
 ### Various animals across taxa are known to form aggregate groups during their lifecycle. This phenomenon can become problematic when faced with rapid environmental change and the alteration of suitable habitats where this clustering behaviour is centered. For example, during the winter, the eastern migratory monarch butterfly population forms a single roosting colony of millions of individuals in a very small region of oyamel forest in Mexico. While many factors are contributing to declining monarch butterfly populations, one of the most concerning is the human alteration of the  oyamel forests which provide this roosting habitat (_____________). Today, only ___________ remains of the original __________ which could house these overwintering insects. Unfortunately, habitat alteration and loss is only projected to increase as human infrastructure expands, which is likely to continue to threaten certain habitats and species that utilize these habitats. For conservation of habitats to be effective, it is important to understand the degree to which these habitats are being used by endangered species, especially when endangered species aggregate in these areas.
-### One highly threatened species whose aggregation ecology requries greater study is the bank swallow (Riparia riparia). The North American bank swallow has declined by _________. Much of its behavioural ecology remains unknown, a shortcoming that must be addressed if this species is to be conserved. Bank swallows form breeding colonies on the banks of lakes and in gravel pits across North America.  yet much about its  recently been discovered as using wetland habitats habitat that has faced significant alteration is that of wetlands in Ontario. In the 1800s, Ontario was composed of over ________ hectares of wetland habitats, but only __________ of this area remains. Wetlands are home to a host of threatened and endangered species.  more surprising is that some aggregation behaviours are only just being in North America. One such example is the bank swallow (Riparia riparia), a bird native to and threatened in North America (_______). The North American bank swallow 
+### One highly threatened species whose aggregation ecology requries greater study is the bank swallow (*Riparia riparia*). The North American bank swallow has declined by _________. Much of its behavioural ecology remains unknown, a shortcoming that must be addressed if this species is to be conserved. Bank swallows form breeding colonies on the banks of lakes and in gravel pits across North America.  yet much about its  recently been discovered as using wetland habitats habitat that has faced significant alteration is that of wetlands in Ontario. In the 1800s, Ontario was composed of over ________ hectares of wetland habitats, but only __________ of this area remains. Wetlands are home to a host of threatened and endangered species.  more surprising is that some aggregation behaviours are only just being in North America. One such example is the bank swallow (Riparia riparia), a bird native to and threatened in North America (_______). The North American bank swallow
+
+### In this paper, I will explore the roosting behaviour of bank swallows and how this behaviour is affected by environmental factors. The results will help determine directions for future hypothesis-driven studies to determine the cause of this aggregate roosting behaviour. More immediately, the results of this paper will give shed some light on how close a colony needs to be to a roosting habitat for roosting behaviour to be exhibited.
+
+## Methods:
+### 52 bank swallows were captured and tagged at breeding colonies along the shore of Lake Erie and in sand and gravel pits. Birds were then tracked for the remainder 
 ```{r,include=FALSE}
 
 ########### LOAD DATA FILES AND LIBRARIES ##########
@@ -86,7 +93,7 @@ depart_final$temp = depart_final$air_temp - 273
 #get lunar illumination (fraction of the moon that is illuminated) and moon phase at the time the bird was observed (movement to roost could be linked to availability of light)
 depart_final$moon = getMoonIllumination(depart_final$time_departure,keep=c("fraction","phase"))
 
-# create a variable for sky illumination by combining cloud cover and illumination of the moon (moon fraction) --> a full moon has a moon fraction of 1; illum will be maximum (100%) when the moon is full and cloud cover is 0
+# create a variable for nighttime illumination by combining cloud cover and illumination of the moon (moon fraction) --> a full moon has a moon fraction of 1; illum will be maximum (100%) when the moon is full and cloud cover is 0
 depart_final$illum = depart_final$moon.fraction*(1-depart_final$cloud_cover/100)*100
 
 #convert precipitation rate from mm/s (= kg/m^2/s) to mm/h
@@ -135,7 +142,7 @@ ggplot(depart_final, aes(x=cloud_cover, y=roost)) + geom_point(size=4, alpha=0.5
 ggplot(depart_final, aes(x=moon.fraction, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Moon illumination (%)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
 
 
-# Plot the probability of roosting in the wetland complex against the total illumination of the sky (1/cloud cover * lunar illumination)
+# Plot the probability of roosting in the wetland complex against the total nighttime illumination (1/cloud cover * lunar illumination)
 ggplot(depart_final, aes(x=illum, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Sky illumination (%)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
 
 
@@ -166,23 +173,27 @@ ggplot(depart_final) +
 m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + illum + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
 ```
 
-### First, I will examine the normality of the residuals from the random variables using the performance package check_model() function.
-```{r, echo=FALSE out.width="80%", out.height="80%"}
-#examine normality of random variables (other plots from this function are problematic with binomial models)
+### First, I will examine the normality of the residuals from the random variables and the collinearity of fixed predictors (VIF values) using the performance package check_model() function.
+```{r, echo=FALSE, out.width="100%", out.height="100%"}
+#examine normality of random variables and VIFs of fixed effects
 check_model(m)
 ```
-
+### VIF values are all below 3 indicating my fixed effects do not suffer from collinearity. Normality of the random effects also appears fine with no significant deviations from the plotted line.
+### Next, I will examine the dispersion of the residuals for the overall model. This will be done using the DHARMa package.
 ```{r, echo=FALSE}
 #check for over/under dispersion of the overall model using DHARMa
 testDispersion(m) #looks fine
 dharm_output = simulateResiduals(fittedModel=m,plot = F)
 plot(dharm_output) #this looks fine although the lack of deviation is weird - not much can be gathered from the overall residuals in a binomial model anyways - check individual variables
-plotResiduals(dharm_output, form=df.scale$distance) #some overdispersion but not terrible, indicates possible non-linear relationship with distance
-plotResiduals(dharm_output, form=df.scale$ordinal_date) #fine
-plotResiduals(dharm_output, form=df.scale$sex) #fine
-plotResiduals(dharm_output, form=df.scale$id) #some issues but not terrible
-plotResiduals(dharm_output, form=df.scale$colony) #some issues but not terrible
+```
+### There does not appear to be any problems in the overall model. However, the overall residuals do not provide a full assessment for binomial models. I will look at the residuals for each individual variable to assess model fit and check for under or overdispersion.
+```{r}
+plotResiduals(dharm_output, form=df.scale$distance) #some problem with model fit due to pattern in the residuals but not terrible, indicates possible non-linear relationship with distance
+```
+### There appears to be some issues in the residuals here, but it does not appear too problematic. A pattern would indicate a non-linear relationship with distance (and require a transformation), but I am not sure a particular pattern is evident. For good measure, I did try some transformations but none increased the suitability of the model fit (with some producing errors due to the logarithmic nature of the binomial model). Given this, and that the Levene's test may be overly sensitive with my sample size (1579 observations on 52 birds).
+### I will continue with the evaluations of the residuals for the other predictors below.
 
+```{r, echo=FALSE}
 #see if transformation to distance helps fit - appears to be a log relationship but cannot take log of my distance variable (produces NAs and unscaled data does not converge) - try negative exponential, sqrt, adding a polynomial term
 
 #sqrt 
@@ -198,138 +209,83 @@ m_sqrd = glmer(roost ~ distance+I(distance^2) + sex + ordinal_date + sex:ordinal
 plotResiduals(simulateResiduals(fittedModel=m_sqrd,plot = F), form=df.scale$distance) #fit is about the same
 ```
 
-### Translations of distance did not help the fit of my model, however, plots are alright (per ________). Therefore, I will continue with my original model. I will now look at the effects of the model, first on the logit scale.
+```{r, echo=FALSE}
+plotResiduals(dharm_output, form=df.scale$ordinal_date) #fine
+```
+### Ordinal date appears to be fine.
+```{r, echo=FALSE}
+plotResiduals(dharm_output, form=df.scale$sex) #fine
+```
+### Sex also appears to be fine.
+```{r, echo=FALSE}
+plotResiduals(dharm_output, form=df.scale$id) #some issues but not terrible
+plotResiduals(dharm_output, form=df.scale$colony) #some issues but not terrible
+
+```
+### Some issues in the random effects here but it does not appear terrible. Documentation on how to evaluate these issues is scarce. I will check the QQ plot for normality of the random effects.
+
+```{r}
+r5 = as.data.frame(ranef(m))
+ggplot(data = r5, aes(sample = condval)) +
+  geom_qq() + geom_qq_line() +
+  facet_wrap(~ grpvar) +
+  theme_classic()
+```
+### Normality of the random effects here lokos good, so I will continue as the assumptions appear to be met.
+###Now, I will begin evaluating the effects of the model.
 
 ```{r, echo=FALSE, out.width="80%", out.height="80%"}
 
 ############################# SECTION 1.5.1 EFFECTS PLOTS ##############################
 summary(m)
 
-plot(allEffects(m))
+plot(effect("illum",m),rescale.axis=F,main="",ylab="Probability of roosting",xlab="Total nighttime illumination (%)")
 
 ```
-### There is a significant relationship with each variable except for the night sky illumination % (illum). However, the effect size is hard to elucidate here as these estimates are on a logistic scale, and on variables that have been scaled (ordinal date and distance). Below I will back-transform these to the observed scale.
-
-```{r, echo=FALSE}
-############################# SECTION 1.5.2 EFFECTS PLOTS ON OBSERVED SCALE ##############################
-
-# DISTANCE TRANSFORMATIONS
-#get the predicted value, upper and lower CI bounds on the latent/logit scale for predicted roosting probability as a function of distance from colony to roost site
-df.scale$dist_logit_ypred = -2.489848 -2.019687*df.scale$distance #get the predicted value on the logit scale using scaled distance value
-df.scale$dist_logit_upper = df.scale$dist_logit_ypred+0.315909*1.96 #get upper confidence interval bound on logit
-df.scale$dist_logit_lower = df.scale$dist_logit_ypred-0.315909*1.96 #get lower CI bound on logit
-
-#convert these predicted logit values to the observed scale
-depart_final$dist_ypred = 1 / (1 + exp(-df.scale$dist_logit_ypred))
-depart_final$dist_upper = 1 / (1 + exp(-df.scale$dist_logit_upper))
-depart_final$dist_lower = 1 / (1 + exp(-df.scale$dist_logit_lower))
-
-#plot the predicted values on the observed scale with the un-scaled distance values
-ggplot(depart_final,aes(distance,dist_ypred,
-               ymin=dist_lower,ymax=dist_upper,legend="FALSE",
-               ))+
-     geom_line()+theme(legend.position="none")+
-     geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("Distance to roost site (km)")+
-     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5),axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))
-
-```
-### Here, we can see that the distance to the wetland site has a significant effect on whether the wetland roost will be used. If the wetland habitat is within 10 km, the swallows are estimated to use them to roost at night 50%-60% of the time. There is a significant drop in roosting use with distance to the wetland. At >50 km from the colony, the birds will only use the roost at an estimated mean of ~13% of the time (with 95% confidence interval maximum being ~22%), 1/4th the use of wetlands within 10 km. Beyond this, the wetland begins to be used <10% of the time.
-### I will continue with my exploration of effects, looking at the interaction of the bird's sex and the ordinal date of the season next.
+### There is a significant relationship with each variable except for the nighttime illumination % (illum). When observing the effect plot, there is only a slight negative relationship between illumination and the probability of roosting at a wetland, with 0% illumination estimated to have a mean of ~10.5% of birds roosting, and 100% illumination having a mean of 8% of birds roosting. The confidence interval does contain potential effects which could be biologically significant - anywhere from 18% decreasing to 4% roosting rate with illumination, or 6% to 16% increasing rate with illumination. Because of this I cannot confidently say there no relationship between roosting rate/probability and nighttime illumination. This relationship should be analyzed further.
+### Now I call my plot showing the relationship between distance to the wetland roost and the probability of roosting.
 
 ```{r, echo=FALSE}
 
-# ORDINAL DATE TRANSFORMATIONS
-#view estimate for ordinal date
+#get predicted y values for distance on the scaled distance values
+predict_dist = predictorEffect("distance",m, focal.levels=100,xlevels=1)
+
+#convert distance values back to the un-scaled, un-centered form
+predict_dist$x$distance = predict_dist$x$distance*scaleList_dist$scale + scaleList_dist$center
+
+#plot the data (rescale.axis = F prevents it from changing the spacing between the y-tick marks to make the relationship appear linear)
+plot(predict_dist,rescale.axis=F,main="", ylab="Probability of roosting",xlab="Distance to wetland (km)")
+```
+
+
+### Here, we can see that the distance to the wetland site has a significant effect on whether the wetland roost will be used. If the wetland habitat is within 30 km (25.62 km being the closest in my dataset), bank swallows are estimated to roost ~40%-60% of the time. There is a significant drop in roosting percentage with distance to the wetland. At 50 km, only 15% of bank swallows will travel to the wetland to roost (with 95% confidence interval maximum being ~18%). Beyond this distance, the wetland starts to be used <10% of the time.
+### I will continue with my exploration of effects with the interaction of sex and the ordinal date.
+
+```{r,echo=FALSE}
+
+#get predicted y values for distance on the scaled distance values
+predict_date = predictorEffect("ordinal_date",m, focal.levels=50,xlevels=5)
+#convert date values back to the un-scaled, un-centered form
+predict_date$x$ordinal_date = predict_date$x$ordinal_date*scaleList_date$scale + scaleList_date$center
+
+#plot the data (rescale.axis = F prevents it from changing the spacing between the y-tick marks to make the relationship appear linear)
+plot(predict_date,rescale.axis=F, ylab="Probability of roosting",xlab="Ordinal date",main="",type=c("response"), lines=list(multiline=TRUE),confint=list(style="bands"), axes=list(y=list(ticks=list(at=c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9)))))
+
+
+```
+
+### Here we can see the effect of the interaction sex and ordinal date. During the early breeding season period, males are estimated to use wetlands to roost proportionately more than females. For example, at ordinal date 170, males appear to be using wetlands about twice as much as females (~10% of males roosting versus approximately 5% of females). This greater use of roosts by males early in the season was previously observed in a small sample of bank swallows (n = 12) in this same study system (@Falconer2016). It is hypothesized that the early season difference could be due to females having to provide warmth to their young. Before 8 days old, chicks are unable to regulate their own body temperature, and rely on the warmth from their mother to survive (@Marsh1979). Thus, females likely cannot leave the colony to roost before this early hatchling period is over.
+###  Later it the season it appears that the relationship to ordinal date changes for males and females. Around ordinal date 188, we begin to see females utilizing wetland roosts more than males. By ordinal date 200, females are roosting 7% more than males, although the rate for males is already quite high at 82%. While the overall interaction between sex and ordinal date is significant, it should be noted that there are no clear points of separation between the 95% CIs of the two sexes.
+
+### Finally, I will look at variation in the random effects.
+```{r, echo=FALSE}
+
 summary(m)
-#get the predicted value, upper and lower CI bounds on the logit scale for Ordinal date
-df.scale$date_logit_ypred = -2.489848 + 1.630949*df.scale$ordinal_date #get the predicted value on the logit scale using scaled distance value
-df.scale$date_logit_upper = df.scale$date_logit_ypred+0.160221*1.96 #get upper confidence interval bound on logit
-df.scale$date_logit_lower = df.scale$date_logit_ypred-0.160221*1.96 #get lower CI bound on logit
-
-#convert these values to the observed scale
-depart_final$date_ypred = 1 / (1 + exp(-df.scale$date_logit_ypred))
-depart_final$date_upper = 1 / (1 + exp(-df.scale$date_logit_upper))
-depart_final$date_lower = 1 / (1 + exp(-df.scale$date_logit_lower))
-
-
-#plot the predicted values of roosting probability on the observed scale with the un-scaled ordinal date values - THIS IS THE RELATIONSHIP FOR FEMALES
-ggplot(depart_final,aes(ordinal_date,date_ypred,
-               ymin=date_lower,ymax=date_upper,legend="FALSE",
-               ))+
-     geom_line()+theme(legend.position="none")+ theme_bw()+
-     geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting (Female)")+xlab("Ordinal date")+
-     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))+ scale_x_continuous() + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1))+coord_cartesian(ylim = c(0, 0.9))
-
-#get the same plot for males (this is the interaction component of sex:ordinal_date) - function is: ordinal_date_male prediction = intercept + male_estimate + (ordinal_date_estimate + male:ordinal_date_estimate)*scaled_ordinal_date
-df.scale$date_m_logit_ypred = -2.489848 + 0.724532 + (1.630949-0.455592)*df.scale$ordinal_date #get the predicted value on the logit scale using scaled distance value
-df.scale$date_m_logit_upper = df.scale$date_m_logit_ypred+0.20704*1.96 #get upper confidence interval bound on logit
-df.scale$date_m_logit_lower = df.scale$date_m_logit_ypred-0.20704*1.96 #get lower CI bound on logit
-
-#convert these predicted values from logit scale to the observed scale 1/(1 + exp(-prediction))
-depart_final$date_m_ypred = 1 / (1 + exp(-df.scale$date_m_logit_ypred))
-depart_final$date_m_upper = 1 / (1 + exp(-df.scale$date_m_logit_upper))
-depart_final$date_m_lower = 1 / (1 + exp(-df.scale$date_m_logit_lower))
-
-#plot the relationship for males
-ggplot(depart_final,aes(ordinal_date,date_m_ypred,
-               ymin=date_m_lower,ymax=date_m_upper,legend="FALSE",
-               ))+
-     geom_line()+theme(legend.position="none")+
-     geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting (Male)")+xlab("Ordinal date")+theme_bw()+
-     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))+ scale_x_continuous() + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1))+coord_cartesian(ylim = c(0, 0.9))
-
-#plot both male and female relationship with ordinal date on the same plot - dashed lines for 95% CIs for each respective group - could not change 95% lines to match - ideally change the values above to an if statement, calculate only for values where sex = M and sex = F, respectively, and put them under a single column
-ggplot(depart_final,aes(ordinal_date))+
-  geom_line(aes(y=date_m_ypred,colour="Male"))+geom_line(aes(y=date_ypred,colour="Female"))+
-  geom_line(aes(y=date_m_ypred,colour="Male"))+geom_line(aes(y=date_ypred,colour="Female"))+
-  geom_line(aes(y=date_m_upper,colour="Male 95% CI"),linetype = "dashed")+geom_line(aes(y=date_m_lower,colour="Male 95% CI"),linetype = "dashed")+
-  geom_line(aes(y=date_upper,colour="Female 95% CI"),linetype = "dashed")+geom_line(aes(y=date_lower,colour="Female 95% CI"),linetype = "dashed")+
-  theme(legend.position="none")+
-     ylab("Probability of roosting")+xlab("Ordinal date")+theme_bw()+
-     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))+ scale_x_continuous() + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1))+coord_cartesian(ylim = c(0, 0.9))
-```
-### Here we can see the effect of the interaction sex and ordinal date. Before the ordinal date of 171, there is no overlap of 95% CIs between the two sexes. During this early breeding season period, males use wetlands to roost significantly more often. At ordinal date 170, it's estimated that ~12.5% of males are using the wetlands to roost at night, in contrast to only ~6% of females. This shows twice as many males using the wetlands compared to females in the early breeding period. This greater use of roosts by males was previously observed in a small sample of bank swallows (n = 12) in this same study system (@Falconer2016). It is hypothesized that this difference could be due to females having to provide warmth to their young. Before 8 days old, chicks are unable to regulate their own body temperature, and rely on the warmth from their mother (@Marsh1979). Thus, females likely cannot leave the colony to roost before this period is over.
-### We see that this greater use of wetlands by males compared to females continues for the majority of the breeding season, although after day 171 this difference is not as significant (overlap of the 95% CIs). Interestingly, it seems that males and females could be swapping their overall use of the wetland late in the season, with the mean estimate for females beginning to exceed that of males around ordinal date 187. After this, the estimated use of wetlands by females is about  1/10th greater than males. However, the 95% CIs do overlap here, indicating this observation could be due to chance.
-
-```{r}
-#get the same plot for males (this is the interaction component of sex:ordinal_date)
-df.scale$illum_logit_ypred = -2.489848 - 0.003178*depart_final$illum #get the predicted value on the logit scale
-df.scale$illum_logit_upper = df.scale$illum_logit_ypred+0.003160*1.96 #get upper confidence interval on logit
-df.scale$illum_logit_lower = df.scale$illum_logit_ypred-0.003160*1.96 #get lower CI on logit
-
-#convert these values to the observed scale
-depart_final$illum_ypred = 1 / (1 + exp(-df.scale$illum_logit_ypred))
-depart_final$illum_upper = 1 / (1 + exp(-df.scale$illum_logit_upper))
-depart_final$illum_lower = 1 / (1 + exp(-df.scale$illum_logit_lower))
-
-ggplot(depart_final,aes(illum,illum_ypred,
-               ymin=illum_lower,ymax=illum_upper,legend="FALSE",
-               ))+
-     geom_line()+theme(legend.position="none")+
-     geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("illum to roost site (km)")+
-     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5),axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))+ scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1))+coord_cartesian(ylim = c(0, 0.9))
-plot(allEffects(m))
-plot(effect("illum",m))
-
-effects_m = allEffects(m)
-effect_dist = as.data.frame(effects_m$distance)
-effect_dist_unscaled = effect_dist
-effect_dist_unscaled$distance = effect_dist$distance*scaleList_dist$scale + scaleList_dist$center
-effect_dist_unscaled
-ggplot(effect_dist_unscaled,aes(distance,fit,
-               ymin=lower,ymax=upper,legend="FALSE",
-               ))+
-     geom_line()+theme(legend.position="none")+
-     geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("Distance to roost site (km)")+
-     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))
-
-
-```
-
-```{r, echo=FALSE}
+ranova(m)
 ############### plots of random effects
-r1 = as.data.frame(ranef(m, condVar = TRUE, whichel = c("id", "colony")))
-p1 = ggplot(subset(r1, grpvar == "id"), aes(y = grp, x = condval)) +
+r1 = as.data.frame(ranef(m, condVar = TRUE, whichel = c("id:colony", "colony")))
+summary(r1)
+p1 = ggplot(subset(r1, grpvar == "id:colony"), aes(y = grp, x = condval)) +
   geom_point() +
   geom_pointrange(
     aes(xmin = condval - condsd * 1.96, xmax = condval + condsd * 1.96)
@@ -345,12 +301,10 @@ p2 = ggplot(subset(r1, grpvar == "colony"), aes(y = grp, x = condval)) +
   geom_vline(aes(xintercept = 0, color = "red")) +
   theme_classic() +
   theme(legend.position = "none")
-p1 + p2
+p1+p2
 
+```
 
-r5 = as.data.frame(ranef(m))
-ggplot(data = r5, aes(sample = condval)) +
-  geom_qq() + geom_qq_line() +
-  facet_wrap(~ grpvar) +
-  theme_classic()
+```{r,echo=FALSE}
+
 ```
