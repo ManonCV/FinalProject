@@ -20,8 +20,8 @@ knitr::opts_knit$set(root.dir = 'C:/Users/Manon/Documents/BIO8940 - Advanced Sta
 ### Bank swallow movements to roosting habitat
 ### By: Manon Veselovsky - 8259387
 ### Introduction:
-#### 
-
+#### Various animals across taxa are known to form aggregate groups during their lifecycle. This phenomenon can become problematic when faced with rapid environmental change and the alteration of suitable habitats where this clustering behaviour is centered. For example, during the winter, the eastern migratory monarch butterfly population forms a single roosting colony of millions of individuals in a very small region of oyamel forest in Mexico. While many factors are contributing to declining monarch butterfly populations, one of the most concerning is the human alteration of the  oyamel forests which provide this roosting habitat (_____________). Today, only ___________ remains of the original __________ which could house these overwintering insects. Unfortunately, habitat alteration and loss is only projected to increase as human infrastructure expands, which is likely to continue to threaten certain habitats and species that utilize these habitats. For conservation of habitats to be effective, it is important to understand the degree to which these habitats are being used by endangered species, especially when endangered species aggregate in these areas.
+#### One highly threatened species whose aggregation ecology requries greater study is the bank swallow (Riparia riparia). The North American bank swallow has declined by _________. Much of its behavioural ecology remains unknown, a shortcoming that must be addressed if this species is to be conserved. Bank swallows form breeding colonies on the banks of lakes and in gravel pits across North America.  yet much about its  recently been discovered as using wetland habitats habitat that has faced significant alteration is that of wetlands in Ontario. In the 1800s, Ontario was composed of over ________ hectares of wetland habitats, but only __________ of this area remains. Wetlands are home to a host of threatened and endangered species.  more surprising is that some aggregation behaviours are only just being in North America. One such example is the bank swallow (Riparia riparia), a bird native to and threatened in North America (_______). The North American bank swallow 
 ```{r,include=FALSE}
 
 ########### LOAD DATA FILES AND LIBRARIES ##########
@@ -55,22 +55,22 @@ library(tidyverse) #for data management/processing
 
 
 # # get surface air temperature at the detected time and location of the bird (data interpolated between weather stations and between times)
-# departure$air_temp <- NCEP.interp.surface('air.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = FALSE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
+# departure$air_temp = NCEP.interp.surface('air.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = FALSE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
 
 # # get precipitable water (total amount) (kg/m^2) in the air at time of detection - same interpolation
-# departure$precip <- NCEP.interp.surface('pr_wtr.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
+# departure$precip = NCEP.interp.surface('pr_wtr.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
 
 # # get the precipitation rate for 6 hours after the departure time (kg/m^2/s, equivalent to mm/s); same interpolation
-# departure$precip_rate <- NCEP.interp.gaussian('prate.sfc',departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
+# departure$precip_rate = NCEP.interp.gaussian('prate.sfc',departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
 
 # # Get total cloud cover, in %, for the location of bird detection - same interpolation
-# departure$cloud_cover <- NCEP.interp.gaussian('tcdc.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
+# departure$cloud_cover = NCEP.interp.gaussian('tcdc.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
 
 # # get the East-West wind component
-# departure$uwind <- NCEP.interp.surface('uwnd.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE, interp = 'IDW', p = 1, status.bar=TRUE)
+# departure$uwind = NCEP.interp.surface('uwnd.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE, interp = 'IDW', p = 1, status.bar=TRUE)
 
 # #Get the North/South wind component
-# departure$vwind <- NCEP.interp.surface('vwnd.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = FALSE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE, interp = 'IDW', p = 1, status.bar=TRUE)
+# departure$vwind = NCEP.interp.surface('vwnd.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = FALSE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE, interp = 'IDW', p = 1, status.bar=TRUE)
 
 # # assign the final, processed database to depart_final
 # depart_final = departure
@@ -81,7 +81,7 @@ library(tidyverse) #for data management/processing
 #################### SECTION 1.2 VARIABLE MODIFICATIONS + SCALED DATABASE ################
 
 # convert air temperature from Kelvin to degrees Celsius
-depart_final$temp <- depart_final$air_temp - 273
+depart_final$temp = depart_final$air_temp - 273
 
 #get lunar illumination (fraction of the moon that is illuminated) and moon phase at the time the bird was observed (movement to roost could be linked to availability of light)
 depart_final$moon = getMoonIllumination(depart_final$time_departure,keep=c("fraction","phase"))
@@ -99,7 +99,7 @@ depart_final$id = as.factor(depart_final$id)
 df.scale = standardize(depart_final,select=c("distance","ordinal_date"))
 
 scale_dist = scale(depart_final$distance)
-scaleList_dist <- list(scale = attr(scale_dist, "scaled:scale"),
+scaleList_dist = list(scale = attr(scale_dist, "scaled:scale"),
     center = attr(scale_dist, "scaled:center"))
 
 scale_date = scale(depart_final$ordinal_date)
@@ -159,17 +159,13 @@ ggplot(depart_final) +
 ```
 
 
-``` {r}
-m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + illum + (1|colony/id), data=depart_final, family="binomial",na.action=na.omit)
-```
+```{r,echo=FALSE}
 
-
-``` {r}
+################### MODEL BUILDING AND DIAGNOSTIC PLOTS ####################
 # model has problems using unscaled data, use df.scale (df where distance and ordinal date were scaled and centered)
 m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + illum + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
 
 #examine normality of random variables (other plots form this function are problematic with binomial models)
-check_model(m,check="normality")
 check_model(m)
 
 #check for over/under dispersion using DHARMa
@@ -195,33 +191,100 @@ plotResiduals(simulateResiduals(fittedModel=m_neg,plot = F), form=df.scale$dista
 #polynomial
 m_sqrd = glmer(roost ~ distance+I(distance^2) + sex + ordinal_date + sex:ordinal_date + moon.phase + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
 plotResiduals(simulateResiduals(fittedModel=m_sqrd,plot = F), form=df.scale$distance) #fit is about the same
+```
 
+#### Translations of distance did not help the fit of my model, however, plots are alright (per ________). Therefore, I will continue with 
 
-Anova(m,type=3)
+```{r, echo=FALSE}
+
+############################# EFFECTS PLOTS ##############################
 summary(m)
-df.scale$dist_logit_ypred <- -2.489848 -2.019687*df.scale$distance
-df.scale$dist_logit_upper = df.scale$dist_logit_ypred+0.383874*2
-df.scale$dist_logit_lower = df.scale$dist_logit_ypred-0.383874*2
 
-depart_final$dist_ypred <- exp(df.scale$dist_logit_ypred) / (1 + exp(df.scale$dist_logit_ypred))
-depart_final$dist_upper <- exp(df.scale$dist_logit_upper) / (1 + exp(df.scale$dist_logit_upper))
-depart_final$dist_lower = exp(df.scale$dist_logit_lower) / (1 + exp(df.scale$dist_logit_lower))
+#get the predicted value, upper and lower CI bounds on the latent/logit scale for predicted roosting probability as a function of distance from colony to roost site
+df.scale$dist_logit_ypred = -2.489848 -2.019687*df.scale$distance #get the predicted value on the logit scale using scaled distance value
+df.scale$dist_logit_upper = df.scale$dist_logit_ypred+0.315909*1.96 #get upper confidence interval bound on logit
+df.scale$dist_logit_lower = df.scale$dist_logit_ypred-0.315909*1.96 #get lower CI bound on logit
 
-plot(roost ~  jitter(distance), depart_final) + points(depart_final$distance, depart_final$dist_ypred, col="red", type = "l", lwd = 2)
+#convert these predicted logit values to the observed scale
+depart_final$dist_ypred = 1 / (1 + exp(-df.scale$dist_logit_ypred))
+depart_final$dist_upper = 1 / (1 + exp(-df.scale$dist_logit_upper))
+depart_final$dist_lower = 1 / (1 + exp(-df.scale$dist_logit_lower))
 
+#plot the predicted values on the observed scale with the un-scaled distance values
 ggplot(depart_final,aes(distance,dist_ypred,
                ymin=dist_lower,ymax=dist_upper,legend="FALSE",
                ))+
      geom_line()+theme(legend.position="none")+
      geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("Distance to roost site (km)")+
-     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))
+     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5),axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))
 
-
-str(m)
+#view estimate for ordinal date
 summary(m)
-effects_m =allEffects(m)
-str(effects_m)
-plot(effects_m$illum)
+#get the predicted value, upper and lower CI bounds on the logit scale for Ordinal date
+df.scale$date_logit_ypred = -2.489848 + 1.630949*df.scale$ordinal_date #get the predicted value on the logit scale using scaled distance value
+df.scale$date_logit_upper = df.scale$date_logit_ypred+0.160221*1.96 #get upper confidence interval bound on logit
+df.scale$date_logit_lower = df.scale$date_logit_ypred-0.160221*1.96 #get lower CI bound on logit
+
+#convert these values to the observed scale
+depart_final$date_ypred = 1 / (1 + exp(-df.scale$date_logit_ypred))
+depart_final$date_upper = 1 / (1 + exp(-df.scale$date_logit_upper))
+depart_final$date_lower = 1 / (1 + exp(-df.scale$date_logit_lower))
+
+
+#plot the predicted values of roosting probability on the observed scale with the un-scaled ordinal date values - THIS IS THE RELATIONSHIP FOR FEMALES
+ggplot(depart_final,aes(ordinal_date,date_ypred,
+               ymin=date_lower,ymax=date_upper,legend="FALSE",
+               ))+
+     geom_line()+theme(legend.position="none")+
+     geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("Ordinal date")+
+     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))+ scale_x_continuous() + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1))+coord_cartesian(ylim = c(0, 0.9))
+
+#get the same plot for males (this is the interaction component of sex:ordinal_date) - function is: ordinal_date_male prediction = intercept + male_estimate + (ordinal_date_estimate + male:ordinal_date_estimate)*scaled_ordinal_date
+df.scale$date_m_logit_ypred = -2.489848 + 0.724532 + (1.630949-0.455592)*df.scale$ordinal_date #get the predicted value on the logit scale using scaled distance value
+df.scale$date_m_logit_upper = df.scale$date_m_logit_ypred+0.20704*1.96 #get upper confidence interval bound on logit
+df.scale$date_m_logit_lower = df.scale$date_m_logit_ypred-0.20704*1.96 #get lower CI bound on logit
+
+#convert these predicted values from logit scale to the observed scale 1/(1 + exp(-prediction))
+depart_final$date_m_ypred = 1 / (1 + exp(-df.scale$date_m_logit_ypred))
+depart_final$date_m_upper = 1 / (1 + exp(-df.scale$date_m_logit_upper))
+depart_final$date_m_lower = 1 / (1 + exp(-df.scale$date_m_logit_lower))
+
+#plot the relationship for males
+ggplot(depart_final,aes(ordinal_date,date_m_ypred,
+               ymin=date_m_lower,ymax=date_m_upper,legend="FALSE",
+               ))+
+     geom_line()+theme(legend.position="none")+
+     geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("Ordinal date")+theme_bw()+
+     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))+ scale_x_continuous() + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1))+coord_cartesian(ylim = c(0, 0.9))
+
+#plot both male and female relationship with ordinal date on the same plot - dashed lines for 95% CIs for each respective group - could not change 95% lines to match - ideally change the values above to an if statement, calculate only for values where sex = M and sex = F, respectively, and put them under a single column
+ggplot(depart_final,aes(ordinal_date))+
+  geom_line(aes(y=date_m_ypred,colour="Male"))+geom_line(aes(y=date_ypred,colour="Female"))+
+  geom_line(aes(y=date_m_ypred,colour="Male"))+geom_line(aes(y=date_ypred,colour="Female"))+
+  geom_line(aes(y=date_m_upper,colour="Male 95% CI"),linetype = "dashed")+geom_line(aes(y=date_m_lower,colour="Male 95% CI"),linetype = "dashed")+
+  geom_line(aes(y=date_upper,colour="Female 95% CI"),linetype = "dashed")+geom_line(aes(y=date_lower,colour="Female 95% CI"),linetype = "dashed")+
+  theme(legend.position="none")+
+     ylab("Probability of roosting")+xlab("Ordinal date")+theme_bw()+
+     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))+ scale_x_continuous() + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1))+coord_cartesian(ylim = c(0, 0.9))
+
+#get the same plot for males (this is the interaction component of sex:ordinal_date)
+df.scale$illum_logit_ypred = -2.489848 - 0.003178*depart_final$illum #get the predicted value on the logit scale
+df.scale$illum_logit_upper = df.scale$illum_logit_ypred+0.003160*1.96 #get upper confidence interval on logit
+df.scale$illum_logit_lower = df.scale$illum_logit_ypred-0.003160*1.96 #get lower CI on logit
+
+#convert these values to the observed scale
+depart_final$illum_ypred = 1 / (1 + exp(-df.scale$illum_logit_ypred))
+depart_final$illum_upper = 1 / (1 + exp(-df.scale$illum_logit_upper))
+depart_final$illum_lower = 1 / (1 + exp(-df.scale$illum_logit_lower))
+
+ggplot(depart_final,aes(illum,illum_ypred,
+               ymin=illum_lower,ymax=illum_upper,legend="FALSE",
+               ))+
+     geom_line()+theme(legend.position="none")+
+     geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("illum to roost site (km)")+
+     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5),axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))+ scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1))+coord_cartesian(ylim = c(0, 0.9))
+plot(allEffects(m))
+plot(effect("illum",m))
 
 effect_dist = as.data.frame(effects_m$distance)
 effect_dist_unscaled = effect_dist
@@ -234,31 +297,13 @@ ggplot(effect_dist_unscaled,aes(distance,fit,
      geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("Distance to roost site (km)")+
      geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))
 
-plot(effects_m$'sex:ordinal_date')
-str(effects_m$'sex:ordinal_date'$fit)
-effect_date = as.data.frame(effects_m$'sex:ordinal_date')
-effect_date_unscaled = effect_date
-effect_date_unscaled$ordinal_date = effect_date$ordinal_date*scaleList_date$scale + scaleList_date$center
-effect_date_unscaled
 
-ggplot(effect_date_unscaled,aes(ordinal_date,fit,
-               ymin=lower,ymax=upper,legend="FALSE",
-               color = sex))+
-     geom_line()+theme(legend.position="right")+
-     geom_ribbon(alpha=0.2,colour=NA)+ylab("Probability of roosting")+xlab("Ordinal date")+facet_grid(~sex)+
-     geom_rug(sides="b") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15))
-
-
-str(effects_m)
-plot(effect("distance",m))
-vif(m)
-mean()
 ```
 
 ```{r, echo=FALSE}
 ############### plots of random effects
-r1 <- as.data.frame(ranef(m, condVar = TRUE, whichel = c("id", "colony")))
-p1 <- ggplot(subset(r1, grpvar == "id"), aes(y = grp, x = condval)) +
+r1 = as.data.frame(ranef(m, condVar = TRUE, whichel = c("id", "colony")))
+p1 = ggplot(subset(r1, grpvar == "id"), aes(y = grp, x = condval)) +
   geom_point() +
   geom_pointrange(
     aes(xmin = condval - condsd * 1.96, xmax = condval + condsd * 1.96)
@@ -266,7 +311,7 @@ p1 <- ggplot(subset(r1, grpvar == "id"), aes(y = grp, x = condval)) +
   geom_vline(aes(xintercept = 0, color = "red")) +
   theme_classic() +
   theme(legend.position = "none")
-p2 <- ggplot(subset(r1, grpvar == "colony"), aes(y = grp, x = condval)) +
+p2 = ggplot(subset(r1, grpvar == "colony"), aes(y = grp, x = condval)) +
   geom_point() +
   geom_pointrange(
     aes(xmin = condval - condsd * 1.96, xmax = condval + condsd * 1.96)
@@ -277,7 +322,7 @@ p2 <- ggplot(subset(r1, grpvar == "colony"), aes(y = grp, x = condval)) +
 p1 + p2
 
 
-r5 <- as.data.frame(ranef(m))
+r5 = as.data.frame(ranef(m))
 ggplot(data = r5, aes(sample = condval)) +
   geom_qq() + geom_qq_line() +
   facet_wrap(~ grpvar) +
