@@ -489,6 +489,9 @@ departure$precip_rate <- NCEP.interp.gaussian('prate.sfc',departure$lat2, depart
 
 departure$cloud_cover <- NCEP.interp.gaussian('tcdc.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
 
+test <- NCEP.Tailwind(u=depart_final$uwind, v=depart_final$vwind, direction=depart_final$direction, airspeed=NA)
+
+
 departure$temp <- departure$air_temp - 273
 
 
@@ -515,3 +518,52 @@ ggplot(departure, aes(x=temp, y=roost)) + geom_point(size=4, alpha=0.5, colour="
 
 
 ggplot(departure, aes(x=tailwind, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Air temperature (deg C)") + ylab("Probability of Commute") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(15, 26), breaks=c(15,20,25,30)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+
+
+
+
+####################### SECTION 1.3 EXPLORING VARIABLES #############################
+
+# Plot the probability of roosting in the wetland complex against the distance from the colony to the wetland complex
+ggplot(depart_final, aes(x=distance, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Distance to roost site (km)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(25,90), breaks=c(30,40,50,60,70,80,90)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+# Plot the probability of roosting in the wetland complex against the ordinal date in the season
+ggplot(depart_final, aes(x=ordinal_date, y=roost)) + facet_grid(~sex) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Ordinal date") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(150,200), breaks=c(150,160,170,180,190,200)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+# Plot the probability of roosting in the wetland complex against the surface air temperature
+ggplot(depart_final, aes(x=temp, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Air temperature (deg C)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(15,20,25,30)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+# Plot the probability of roosting in the wetland complex against the total precipitable water in the air column
+ggplot(depart_final, aes(x=precip, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Precipitable water (kg/m^2)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(10,20, 30, 40, 50)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+# Plot the probability of roosting in the wetland complex against 6-hour averaged precipitation rate
+ggplot(depart_final, aes(x=precip_mmh, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Precipitation rate (mm/h)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous() + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+# Plot the probability of roosting in the wetland complex against the cloud cover
+ggplot(depart_final, aes(x=cloud_cover, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Cloud cover") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+# Plot the probability of roosting in the wetland complex against the fraction of the moon that is illuminated
+ggplot(depart_final, aes(x=moon.fraction, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Moon illumination (%)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+
+# Plot the probability of roosting in the wetland complex against the total nighttime illumination (1/cloud cover * lunar illumination)
+ggplot(depart_final, aes(x=illum, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Sky illumination (%)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
+
+
+ggplot(depart_final) + 
+  aes(ordinal_date, roost) +
+  geom_col() +facet_grid(~sex)+
+  scale_fill_identity(guide = "legend")+
+  ylab("Count of birds roosting")+
+  xlab("Ordinal date")
+
+# ggplot(depart_final) +
+#   aes(sex, roost) +
+#   geom_col() +
+#   scale_fill_identity(guide = "legend")+
+#   ylab("Count of birds roosting")+
+#   xlab("Sex")
+
+################## 
+

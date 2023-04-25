@@ -22,22 +22,22 @@ knitr::opts_knit$set(root.dir = 'C:/Users/Manon/Documents/BIO8940 - Advanced Sta
 ### Bank swallow movements to roosting habitat
 ### By: Manon Veselovsky - 8259387
 ## Introduction:
-### Various animals across taxa are known to form aggregate groups during their lifecycle. This phenomenon can become problematic when faced with rapid environmental change such as habitat modification. and the alteration of suitable habitats where this clustering behaviour is centered. For example, during the winter, the eastern migratory monarch butterfly population forms a single roosting colony of millions of individuals in a very small region of oyamel forest in Mexico. While many factors are contributing to declining monarch butterfly populations, one of the most concerning is the human alteration of the  oyamel forests which provide this roosting habitat (_____________). Today, only ___________ remains of the original __________ which could house these overwintering insects. Unfortunately, habitat alteration and loss is only projected to increase as human infrastructure expands, which is likely to continue to threaten certain habitats and species that utilize these habitats. For conservation of habitats to be effective, it is important to understand the degree to which these habitats are being used by endangered species, especially when endangered species aggregate in these areas.
-### One highly threatened species whose aggregation ecology requires greater study is the bank swallow (*Riparia riparia*). Much of the North American bank swallow's behavioural ecology remains unknown, a shortcoming that must be addressed if this species is to be conserved. Bank swallows form breeding colonies on the banks of lakes and in gravel pits across North America. Currently, the threatened status of these birds in Ontario means that 50 m surrounding their breeding colonies must be protected from alteration (Bank Swallow General Habitat Description | Ontario.Ca, n.d.). However, it has been discovered that bank swallows not only form aggregate groups in breeding colonies, but also congregate at night to roost on wetland vegetation. Unfortunately, the use of wetlands at night by these birds has not been taken into consideration in their habitat protection plan due to the recent discovery of this phenomenon. Indeed, much remains unknown about the movement ecology of these birds, and studies must be conducted to evaluate the degree of wetland use by these birds to inform recovery strategies. Currently, we have limited data on the proportiono of nights bank swallows use wetland roosts during the breeding period. Preliminary studies indicate that bank swallow roosting behaviour is negatively associated with night time light availability, and that males utilize wetland roosts more than females during the early breeding period (@Falconer2016; @Saldanha2019). Unfortunately, these studies were only able to evaluate the movement behaviour of a small number of individuals, limiting the conclusions that could be drawn. For recovery plans to be effective it is important to identify the degree to which bank swallows are roosting in wetlands and determine what conditions may modify this roosting behaviour. 
+##### Various animals across taxa are known to form aggregate groups during their lifecycle. This phenomenon can become problematic when faced with rapid environmental change such as habitat modification. and the alteration of suitable habitats where this clustering behaviour is centered. For example, during the winter, the eastern migratory monarch butterfly population forms a single roosting colony of millions of individuals in a very small region of oyamel forest in Mexico. While many factors are contributing to declining monarch butterfly populations, one of the most concerning is the human alteration of the  oyamel forests which provide this roosting habitat (_____________). Today, only ___________ remains of the original __________ which could house these overwintering insects. Unfortunately, habitat alteration and loss is only projected to increase as human infrastructure expands, which is likely to continue to threaten certain habitats and species that utilize these habitats. For conservation of habitats to be effective, it is important to understand the degree to which these habitats are being used by endangered species, especially when endangered species aggregate in these areas.
+##### One highly threatened species whose aggregation ecology requires greater study is the bank swallow (*Riparia riparia*). Much of the North American bank swallow's behavioural ecology remains unknown, a shortcoming that must be addressed if this species is to be conserved. Bank swallows form breeding colonies on the banks of lakes and in gravel pits across North America. Currently, the threatened status of these birds in Ontario means that 50 m surrounding their breeding colonies must be protected from alteration (Bank Swallow General Habitat Description | Ontario.Ca, n.d.). However, it has been discovered that bank swallows not only form aggregate groups in breeding colonies, but also congregate at night to roost on wetland vegetation. Unfortunately, the use of wetlands at night by these birds has not been taken into consideration in their habitat protection plan due to the recent discovery of this phenomenon. Indeed, much remains unknown about the movement ecology of these birds, and studies must be conducted to evaluate the degree of wetland use by these birds to inform recovery strategies. Currently, we have limited data on the proportiono of nights bank swallows use wetland roosts during the breeding period. Preliminary studies indicate that bank swallow roosting behaviour is negatively associated with night time light availability, and that males utilize wetland roosts more than females during the early breeding period (@Falconer2016; @Saldanha2019). Unfortunately, these studies were only able to evaluate the movement behaviour of a small number of individuals, limiting the conclusions that could be drawn. For recovery plans to be effective it is important to identify the degree to which bank swallows are roosting in wetlands and determine what conditions may modify this roosting behaviour. 
 
-### In this paper, I will use a database of 52 bank swallows observed on 49 nights to explore bank swallow roosting behaviour. The results of this paper will determine how often bank swallows are using major wetlands to roost at night. If bank swallows are using wetland roosts for a majority of nights, and are only using wetland roosts when they are close to their colony, two conclusions can be drawn: (1) Wetlands are likely an important habitat for these birds, and (2) wetland habitats close to these colonies should be taken into protection consideration for the overall recovery of the swallows.
+##### In this paper, I will use a database of 52 bank swallows observed on 49 nights to explore bank swallow roosting behaviour. The results of this paper will determine how often bank swallows are using major wetlands to roost at night. If bank swallows are using wetland roosts for a majority of nights, and are only using wetland roosts when they are close to their colony, two conclusions can be drawn: (1) Wetlands are likely an important habitat for these birds, and (2) wetland habitats close to these colonies should be taken into protection consideration for the overall recovery of the swallows.
 
-### While a hypothesis cannot be tested with this data and our current state of knowledge, predictions can be made. Firstly, based on the tentative results of previous studies, I predict that nighttime light availibility will negatively affect roosting probability. Secondly, I predict that males will use wetland roosts proportionately more in the early breeding period than females.
+##### While a hypothesis cannot be tested with this data and our current state of knowledge, predictions can be made. Firstly, based on the tentative results of previous studies, I predict that nighttime light availibility will negatively affect roosting probability. Secondly, I predict that males will use wetland roosts proportionately more in the early breeding period than females.
 
 ## Methods:
-### In summer 2015, 52 bank swallows were captured, sexed, and tagged at breeding colonies along the shore of Lake Erie and in sand and gravel pits near Long Point, Ontario. Automated radio telemtry systems were also installed at each colony and throughout the Long Point wetland complex. Between June 2nd and July 21st, 2015, these birds were tracked for movement between their colony and the main wetland complex. These data were then visually analyzed and a "roost" value assigned to each bird's evening movement (0 = did not roost in wetland, 1 = roosted in wetland). Birds that were detected in the wetland complex in the late evening and early the following morning were assigned a roost value of 1. Birds that were detected at their colony in the late evening and early the following morning were assigned a roosting value of 0. Any nights where birds were not detected in the same location both in the morning and the evening were removed from the dataset.
+##### In summer 2015, 52 bank swallows were captured, sexed, and tagged at breeding colonies along the shore of Lake Erie and in sand and gravel pits near Long Point, Ontario. Automated radio telemtry systems were also installed at each colony and throughout the Long Point wetland complex. Between June 2nd and July 21st, 2015, these birds were tracked for movement between their colony and the main wetland complex. These data were then visually analyzed and a "roost" value assigned to each bird's evening movement (0 = did not roost in wetland, 1 = roosted in wetland). Birds that were detected in the wetland complex in the late evening and early the following morning were assigned a roost value of 1. Birds that were detected at their colony in the late evening and early the following morning were assigned a roosting value of 0. Any nights where birds were not detected in the same location both in the morning and the evening were removed from the dataset.
 
-### Environmental conditions were collected using the package RNCEP. The time and location of birds in the evening were used with this package to determine the evening's wind component vectors (N/S and E/W), the illumated proportion of the moon (1 being full moon, 0 being new moon), and the percentage cloud cover. While the effect of tailwind has not been evaluated for bank swallow roost movements, a study in New Brunswick indicated that light availability (a combination of moon illumination and cloud cover) affected the roosting movement behaviour of bank swallows (@Saldanha2019). Consequently, I multiplied the proportion of moon illumination with the proportion of open sky (1 - proportion of cloud cover) to get the light availability at the time of bird detection. Finally, RNCEP was used to calculate the tailwind flow assistance on the evening a bird was observed. The degree of flow assistance was determined using the RNCEP function NCEP.Tailwind(). Using the north-south and east-west wind components on the evening of observation, and the direction from the bird's colony to the mean wetland location, the airflow assistance for that direction of travel was determined. The resulting tailwind variable takes into account degree of air movement parallel to the movement of the bird to give a unitless value, with negative values being airflow against the animal's direction of travel and positive being airflow in the animal's direction of travel.
+##### Environmental conditions were collected using the package RNCEP. The time and location of birds in the evening were used with this package to determine the evening's wind component vectors (N/S and E/W), the illumated proportion of the moon (1 being full moon, 0 being new moon), and the percentage cloud cover. While the effect of tailwind has not been evaluated for bank swallow roost movements, a study in New Brunswick indicated that light availability (a combination of moon illumination and cloud cover) affected the roosting movement behaviour of bank swallows (@Saldanha2019). Consequently, I multiplied the proportion of moon illumination with the proportion of open sky (1 - proportion of cloud cover) to get the light availability at the time of bird detection. Finally, RNCEP was used to calculate the tailwind flow assistance on the evening a bird was observed. The degree of flow assistance was determined using the RNCEP function NCEP.Tailwind(). Using the north-south and east-west wind components on the evening of observation, and the direction from the bird's colony to the mean wetland location, the airflow assistance for that direction of travel was determined. The resulting tailwind variable takes into account degree of air movement parallel to the movement of the bird to give a unitless value, with negative values being airflow against the animal's direction of travel and positive being airflow in the animal's direction of travel.
 
-### Additional variables that are included in my analysis are distance, 
+##### Additional variables that are included in my analysis are distance, 
 
 ### Statistical Methods:
-### I fit a generalized linear mixed effects model using a binomial distribution to which factors affect whether a bank swallow roosts overnight at the wetland (1) or remains at the colony (0). I included distance from the wetland (breeding colony location to mean wetland location), nighttime illumination, tailwind, ordinal date, sex of the individual, and the interaction of sex and ordinal date as fixed predictors. I also included the random variable of inividual ID nested within colony, as individuals were only detected at one breeding colony for the duration of monitoring, and individuals were followed on multiple nights (meaning night departure observations are not independent).
+##### I fit a generalized linear mixed effects model using a binomial distribution to which factors affect whether a bank swallow roosts overnight at the wetland (1) or remains at the colony (0). I included distance from the wetland (breeding colony location to mean wetland location), nighttime illumination, tailwind, ordinal date, sex of the individual, and the interaction of sex and ordinal date as fixed predictors. I also included the random variable of inividual ID nested within colony, as individuals were only detected at one breeding colony for the duration of monitoring, and individuals were followed on multiple nights (meaning night departure observations are not independent).
 
 ```{r,include=FALSE}
 
@@ -134,86 +134,36 @@ scaleList_tw = list(scale = attr(scale_tw, "scaled:scale"),
 ```
 
 
-```{r, echo=FALSE}
-
-####################### SECTION 1.3 EXPLORING VARIABLES #############################
-
-# Plot the probability of roosting in the wetland complex against the distance from the colony to the wetland complex
-ggplot(depart_final, aes(x=distance, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Distance to roost site (km)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(25,90), breaks=c(30,40,50,60,70,80,90)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
-
-# Plot the probability of roosting in the wetland complex against the ordinal date in the season
-ggplot(depart_final, aes(x=ordinal_date, y=roost)) + facet_grid(~sex) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Ordinal date") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(limit=c(150,200), breaks=c(150,160,170,180,190,200)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
-
-# Plot the probability of roosting in the wetland complex against the surface air temperature
-ggplot(depart_final, aes(x=temp, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Air temperature (deg C)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(15,20,25,30)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
-
-# Plot the probability of roosting in the wetland complex against the total precipitable water in the air column
-ggplot(depart_final, aes(x=precip, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Precipitable water (kg/m^2)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(10,20, 30, 40, 50)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
-
-# Plot the probability of roosting in the wetland complex against 6-hour averaged precipitation rate
-ggplot(depart_final, aes(x=precip_mmh, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Precipitation rate (mm/h)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous() + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
-
-# Plot the probability of roosting in the wetland complex against the cloud cover
-ggplot(depart_final, aes(x=cloud_cover, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Cloud cover") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
-
-# Plot the probability of roosting in the wetland complex against the fraction of the moon that is illuminated
-ggplot(depart_final, aes(x=moon.fraction, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Moon illumination (%)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
-
-
-# Plot the probability of roosting in the wetland complex against the total nighttime illumination (1/cloud cover * lunar illumination)
-ggplot(depart_final, aes(x=illum, y=roost)) + geom_point(size=4, alpha=0.5, colour="purple") + stat_smooth(method="glm", formula=y~x, method.args = list(family = "binomial"), colour="purple") + theme_bw() + xlab("Sky illumination (%)") + ylab("Probability of Roosting") + theme(strip.background = element_rect(fill="white"),axis.title.x=element_text(size=15, vjust=-0.4), axis.title.y=element_text(size=15, vjust=1.5), axis.text.x=element_text(size=15), axis.text.y=element_text(size=15)) + scale_x_continuous(breaks=c(0,25,50,75,100)) + scale_y_continuous(breaks=c(0,0.10,0.20,0.30,0.40,0.50,0.60,0.70,0.80,0.90,1)) + coord_cartesian(ylim=c(-0.01,1)) + theme(legend.position="none")
-
-
-ggplot(depart_final) + 
-  aes(ordinal_date, roost) +
-  geom_col() +facet_grid(~sex)+
-  scale_fill_identity(guide = "legend")+
-  ylab("Count of birds roosting")+
-  xlab("Ordinal date")
-
-# ggplot(depart_final) +
-#   aes(sex, roost) +
-#   geom_col() +
-#   scale_fill_identity(guide = "legend")+
-#   ylab("Count of birds roosting")+
-#   xlab("Sex")
-
-################## 
-
-
-```
-
 
 ```{r}
 
 ################### SECTION 1.4 MODEL BUILDING AND DIAGNOSTIC PLOTS ####################
-# model has problems using unscaled data, use df.scale (df where distance and ordinal date were scaled and centered)
+# Model of roost probability, using the scaled and centered values for distance, 
 m = glmer(roost ~ distance + sex + ordinal_date + sex:ordinal_date + illum + tailwind + (1|colony/id), data=df.scale, family="binomial")
 ```
 ## Results:
-### Overall, 52 birds were tracked between June 2nd and July 21st, 2015 
-### First, I will examine the normality of the residuals from the random variables and the collinearity of fixed predictors (VIF values) using the performance package check_model() function.
-```{r, echo=FALSE, out.width="100%", out.height="100%"}
+### Diagnostic plots
+##### First, I will examine the normality of the residuals from the random variables and the collinearity of fixed predictors (VIF values) using the performance package check_model() function.
+```{r, include=FALSE}
 #examine normality of random variables and VIFs of fixed effects
 check_model(m)
 ```
-### VIF values are all below 3 indicating my fixed effects do not suffer from collinearity. Normality of the random effects also appears fine with no significant deviations from the plotted line (I will double check this with another plot).
-### Next, I will examine the dispersion of the residuals for the overall model. This will be done using the DHARMa package.
+##### Unfortunately, the display of the check_model() results do not display properly outside R. Results show all VIF values are all below 3 indicating my fixed effects do not suffer from collinearity. Normality of the random effects also appears fine with no significant deviations from the plotted line (I will double check this with another plot later).
+##### Next, I will examine the dispersion of the residuals for the overall model. This will be done using the DHARMa package.
 ```{r, echo=FALSE}
 #check for over/under dispersion of the overall model using DHARMa
 testDispersion(m) #looks fine
 dharm_output = simulateResiduals(fittedModel=m,plot = F)
 plot(dharm_output) #this looks fine although the lack of deviation is weird - not much can be gathered from the overall residuals in a binomial model anyways - check individual variables
 ```
-### There does not appear to be any problems in the overall model. However, the overall residuals do not provide a full assessment for binomial models. I will look at the residuals for each individual variable to assess model fit and check for under or overdispersion.
+##### There do not appear to be any problems in the overall model residuals. However, the overall residuals do not provide a full assessment for binomial models. I will look at the residuals for each individual variable to assess model fit and check for under or overdispersion.
 ```{r}
 plotResiduals(dharm_output, form=df.scale$distance) #some problem with model fit due to pattern in the residuals but not terrible, indicates possible non-linear relationship with distance
 ```
-### There appears to be some issues in the residuals here, but it does not appear too problematic. A pattern would indicate a non-linear relationship with distance (and require a transformation), but I am not sure a particular pattern is evident. For good measure, I did try some transformations but none increased the suitability of the model fit, and many failed to converge. Given this, and that the Levene's test may be overly sensitive with my sample size (1579 observations on 52 birds), I believe the fit is not concerning.
-### I will continue with the evaluations of the residuals for the other predictors below.
+##### There appear to be some issues in the residuals here, but it is not too problematic. A pattern would indicate a non-linear relationship with distance (and require a transformation), but I am not sure a particular pattern is evident. For good measure, I did try some transformations but none increased the suitability of the model fit, and many failed to converge. Overall, I believe the fit is not overly concerning.
 
-```{r, echo=FALSE}
-#see if transformation to distance helps fit - appears to be a log relationship but cannot take log of my distance variable (produces NAs and unscaled data does not converge) - try negative exponential, sqrt, adding a polynomial term
+```{r, include=FALSE}
+#see if transformation to distance help - try negative exponential, sqrt, adding a polynomial term, others cannot be used as they introduce NAs
 
 #sqrt 
 m_exp = glmer(roost ~ exp(distance) + sex + ordinal_date + sex:ordinal_date + illum + tailwind + (1|colony/id), data=df.scale, family="binomial",na.action=na.omit)
@@ -228,25 +178,27 @@ m_sqrd = glmer(roost ~ distance+I(distance^2) + sex + ordinal_date + sex:ordinal
 plotResiduals(simulateResiduals(fittedModel=m_sqrd,plot = F), form=df.scale$distance) #fit is about the same
 ```
 
+##### I will continue with the evaluations of the residuals for the other predictors below.
+
 ```{r, echo=FALSE}
 plotResiduals(dharm_output, form=df.scale$ordinal_date) #fine
 ```
-### Ordinal date appears to be fine.
+##### Ordinal date appears to be fine, with no patterns or evidence of over or under dispersion.
 ```{r, echo=FALSE}
 plotResiduals(dharm_output, form=df.scale$sex) #fine
 ```
-### Sex also appears to be fine.
+##### Sex also appears to be fine.
 
 ```{r, echo=FALSE}
 plotResiduals(dharm_output,form=df.scale$tailwind)
 ```
-### Tailwind is fine.
+##### Tailwind also appears to be fine.
 
 ```{r, echo=FALSE}
 plotResiduals(dharm_output, form=df.scale$id) #some issues but not terrible
 plotResiduals(dharm_output, form=df.scale$colony) #some issues but not terrible
 ```
-### Some issues in the random effects here but not to bad. Documentation on how to evaluate these issues is scarce. I will check the QQ plot for normality of the random effects.
+##### There are some issues in the random effects here but they do not appear too bad. Documentation on how to evaluate these issues is scarce. I will check the QQ plot for normality of the random effects more closely.
 
 ```{r}
 r5 = as.data.frame(ranef(m))
@@ -255,19 +207,21 @@ ggplot(data = r5, aes(sample = condval)) +
   facet_wrap(~ grpvar) +
   theme_classic()
 ```
-### Normality of the random effects here looks good, so I will continue as the assumptions appear to be met.
-###Now, I will begin evaluating the effects of the model.
+##### Normality of the random effects here looks good as the points roughly follow the QQ line. Overall, I believe the assumption of normality of residuals for each variable has been met. This, coupled with the fact that there is no collinearity between my predictors, allow me to feel confident in evaluating the effects of my model.
 
+### Model effects
 ```{r, echo=FALSE, out.width="80%", out.height="80%"}
 
-############################# SECTION 1.5.1 EFFECTS PLOTS ##############################
+############################# SECTION 2: EFFECTS ##############################
 summary(m)
-
+```
+##### There is a significant relationship with each variable except for the nighttime illumination % (illum). Because of the log link function for binomial variables, interpretation of these raw estimates is not clear. Thus, I will focus on the back-transformed effects plots on the observed scale. 
+```{r,echo=FALSE}
 plot(effect("illum",m),rescale.axis=F,main="",ylab="Probability of roosting",xlab="Total nighttime illumination (%)")
 
 ```
-### There is a significant relationship with each variable except for the nighttime illumination % (illum). When observing the effect plot for illum, there is only a slight negative relationship between illumination and the probability of roosting at a wetland. Indeed, 0% illumination estimated to have a mean estimate of ~10.5% of birds roosting, and 100% illumination having a mean estimate of 8% of birds roosting. The confidence interval does contain potential effects which could be biologically significant - anywhere for a decreasing relationship from 18% to 4% roosting rate with illumination, or 6% to 16% increasing rate with illumination. Because of this I cannot definitively say there no relationship between roosting rate/probability and nighttime illumination (as this differences would be biologically significant). However, it is likely that this is not an overall important relationship given the sample size here.
-### Now I call my plot showing the relationship between distance to the wetland roost and the probability of roosting.
+##### Looking at the effect plot for illum, there is only a slight negative relationship between illumination and the probability of roosting at a wetland. Indeed, 0% illumination estimated to have a mean estimate of ~10.5% of birds roosting, and 100% illumination having a mean estimate of 8% of birds roosting. The confidence interval does contain potential effects which could be biologically significant - anywhere for a decreasing relationship from 18% to 4% roosting rate with illumination, or 6% to 16% increasing rate with illumination. Because of this I cannot definitively say there no relationship between roosting rate/probability and nighttime illumination (as this differences would be biologically significant). However, it is unlikely that this is an overall important relationship given the sample size here.
+##### Now I call my plot showing the relationship between distance to the wetland roost and the probability of roosting.
 
 ```{r, echo=FALSE}
 
@@ -281,9 +235,8 @@ predict_dist$x$distance = predict_dist$x$distance*scaleList_dist$scale + scaleLi
 plot(predict_dist,rescale.axis=F,main="", ylab="Probability of roosting",xlab="Distance to wetland (km)")
 ```
 
-
-### Here, we can see that the distance to the wetland site has a significant effect on whether the wetland roost will be used. If the wetland habitat is within 30 km (25.62 km being the closest in my dataset), bank swallows are estimated to roost anywhere from ~45%-85% (mean estimate ~60%) of the time. There is a significant drop in roosting percentage with distance to the wetland. At 50 km, only 15% of bank swallows will travel to the wetland to roost (with 95% confidence interval maximum being ~25%). Beyond this distance, the wetland starts to be used <20% of the time.
-### I will continue with my exploration of effects with the interaction of sex and the ordinal date.
+##### Here, we can see that the distance to the wetland site has a significant effect on whether the wetland roost will be used. If the wetland habitat is within 30 km (25.62 km being the closest in my dataset), bank swallows are estimated to roost anywhere from ~45%-85% (mean estimate ~60%) of the time. There is a significant drop in roosting probability with distance to the wetland (p=1.12*10-e). At 50 km, only 15% of bank swallows will travel to the wetland to roost (with 95% confidence interval maximum being ~25%). Beyond this distance, the wetland starts to be used <20% of the time, or less than half the probability of close wetlands.
+##### I will continue with my exploration of effects with the interaction of sex and the ordinal date.
 
 ```{r,echo=FALSE}
 
@@ -298,8 +251,9 @@ plot(predict_date,rescale.axis=F, ylab="Probability of roosting",xlab="Ordinal d
 
 ```
 
-### Here we can see the effect of the interaction sex and ordinal date. During the early breeding season period, males are estimated to use wetlands to roost proportionately more than females. For example, at ordinal date 170, males appear to be using wetlands about twice as much as females (~10% of males roosting versus approximately 5% of females). This greater use of roosts by males early in the season was previously observed in a small sample of bank swallows (n = 12) in this same study system (@Falconer2016). It is hypothesized that the early season difference could be due to females having to provide warmth to their young. Before 8 days old, chicks are unable to regulate their own body temperature, and rely on the warmth from their mother to survive (@Marsh1979). Thus, females likely cannot leave the colony to roost before this early hatchling period is over.
-###  Later it the season it appears that the relationship to ordinal date changes for males and females. Around ordinal date 188, we begin to see females utilizing wetland roosts more than males. By ordinal date 200, females are roosting 7% more than males, although the rate for males is already quite high at 82%. While the overall interaction between sex and ordinal date is significant, it should be noted that there are no clear points of separation between the 95% CIs of the two sexes.
+##### Here we can see the effect of the interaction sex and ordinal date. During the early breeding season period, males are estimated to use wetlands to roost proportionately more than females. For example, at ordinal date 170, males appear to be using wetlands about twice as much as females (mean estimate of ~10% males roosting versus ~5% of females).
+#####  Later it the season it appears that the relationship to ordinal date changes for males and females. Around ordinal date 188, we begin to see females utilizing wetland roosts more than males. By ordinal date 200, females are ~8% more likely to roost than males, although the rate for males is already quite high at ~83%. While the overall interaction between sex and ordinal date is significant (p = 0.028), it should be noted that there are no clear points of separation between the 95% CIs of the two sexes. More individuals would likely be needed to get clear separation of these CIs.
+##### Overall, for both males and females, there is a positive relationship between ordinal date and the probability of roosting. The early breeding season, ordinal date 160 to 170, sees very low use of roosting sites (<10% probability). At ordinal date 180 we begin to see a sharp increase in overall roost use by both seexes, going from ~20% probability at 180 to ~60% at ordinal date 190. By ordinal date 200, the probability of using wetland roosts increases to 80%-90%.
 ### Next, I will look at the effect of tailwind.
 
 ```{r}
@@ -307,17 +261,15 @@ plot(predict_date,rescale.axis=F, ylab="Probability of roosting",xlab="Ordinal d
 predict_tw = predictorEffect("tailwind",m, focal.levels=100,xlevels=1)
 
 #convert tailwind values back to the un-scaled, un-centered form
-predict_dist$x$tailwind = predict_tw$x$tailwind*scaleList_tw$scale + scaleList_tw$center
+predict_tw$x$tailwind = predict_tw$x$tailwind*scaleList_tw$scale + scaleList_tw$center
 
 #plot the data (rescale.axis = F prevents it from changing the spacing between the y-tick marks to make the relationship appear linear)
-plot(predict_tw,rescale.axis=F,main="", ylab="Probability of roosting",xlab="Tailwind flow assistance")
+plot(predict_tw,rescale.axis=F,main="", ylab="Probability of roosting",xlab="Tailwind flow assistance",xlim=c(-3,3))
 ```
-### Here it can be seen that the degree of tailwind has a significantly positive effect on the probability of roosting for the 
-### Finally, I will look at variation in the random effects.
+##### Here it can be seen that the degree of tailwind has a positive effect on the probability of roosting for the bank swallow. From lowest tailwind (-ve flow assistance) to high tailwind (+ve flow assistance), the mean probability of using wetland roost goes from ~5% to ~16%, increasing to almost 3x the original probability. However, it is important to note that the CI for this estimate is quite wide.
+##### Finally, I will look at variation in the random effects.
 ```{r, echo=FALSE}
-
 summary(m)
-ranova(m)
 ############### plots of random effects
 r1 = as.data.frame(ranef(m, condVar = TRUE, whichel = c("id:colony", "colony")))
 summary(r1)
@@ -340,7 +292,11 @@ p2 = ggplot(subset(r1, grpvar == "colony"), aes(y = grp, x = condval)) +
 p1+p2
 
 ```
+##### Here we can see that individuals do vary in their use of wetlands for overnight roosting. Colonies do not show as strong a variation in roosting behaviour.
 
-```{r,echo=FALSE}
 
-```
+## Discussion:
+
+##### Overall, my results yield some new insight into bank swallow roosting behaviour and confirm some patterns of smaller studies. Firstly, the probability of roosting at the main wetland complex in Long Point did vary significantly with distance from the colony. Birds in colonies close to the wetland complex (25 km) had a mean probability of roosting at the Long Point wetland of 70%, while colonies 50 km away had an estimated probability of ~15% use. If there are positive fitness effects for birds that roost at night, then proximity of suitable roosting habitat could be an important consideration for conservation of these birds. The hypothesis that wetland roosts positively affect fitness of adults by reducing predation risk would be an important next step for conservation assessment. However, it is important to note that my data does not evaluate birds that did not stay at the colony or go to the main wetland complex at Long Point. If a bird left the colony for the night but was not detected at Long Point, my understanding is that it was discarded from this dataset. I have yet to hear back from the individual that performed this process to confirm if my understanding is correct. If correct, then it is possible these birds were utilizing roosts other than the main wetland complex. This would lower the confidence in the estimate for how little birds are using wetland roosts at higher distances, as they could just have more habitats available along the 50km radius surrounding their colony than wetlands within a 25 km radius for those close to Long Point. While I am sure there is a relationship between distance to wetland from the colony and roosting probability, it may not be as strong as the one I found here. This would reduce the need to preserve wetland habitat close to the colony.
+
+##### My study both confirmed and failed to confirm predictors of roosting found by studies previously. For total nighttime illumination, I did not find a significant effect on probability of roosting. Illumination in my study did show a negative effect but it was estimated to be only 2.5% mean difference across the entire range of illumination, from 100% cloud cover and new moon to no cloud cover full moon. In contrast, I did confirm differential roosting probabilities between males and females. Males had an estimated 2x the probability of females to roost in the early breeding period. Additionally, I found that males and females seem to swap relative roost probability in the late breeding period, with females becoming more likely to roost than males. However, this phenomenon of female roosting probability exceeding male roosting probability was dwarfed by the overall trend across both sexes. In the late season, both sexes exhibited 80%-90% probability of roosting in wetlands. This high use of wetlands in the late season indicates that wetlands could be extremely important to the ecology of bank swallows. Again, if the hypothesis that wetlands provide safety from predation is proven, this high use of wetlands by these birds would mean they are of critical importance for bank swallows, especially considering that less than 10% of total wetland habitats in southern Ontario remain of those pre-industrial revolution. The evidence that individuals vary significantly in their use of wetlands as roosts indicates that a test of the predation hypothesis is possible. I suggest this as the next step in evaluating the roosting behaviour of bank swallows.
