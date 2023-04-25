@@ -6,7 +6,6 @@ output:
     df_print: paged
   pdf_document: default
 date: "2023-04-24"
-bibliography: mabiblio.bib
 ---
 
 
@@ -22,8 +21,8 @@ knitr::opts_knit$set(root.dir = 'C:/Users/Manon/Documents/BIO8940 - Advanced Sta
 ### Bank swallow movements to roosting habitat
 ### By: Manon Veselovsky - 8259387
 ## Introduction:
-##### Various animals across taxa are known to form aggregate groups during their lifecycle [@Bednekoff2003]. This phenomenon can become problematic when faced with habitat modification if this alters the suitable habitat where this clustering behaviour is centered. For example, during the winter, the eastern migratory monarch butterfly population forms a single roosting colony of millions of individuals in a very small region of oyamel forest in Mexico. While many factors contribute to declining monarch butterfly populations, one of the most concerning is the illegal logging of the  oyamel forests which provide this rare roosting habitat for monarchs (@Flores-Martinez2019). Unfortunately, habitat alteration and loss is only projected to increase as human infrastructure expands, which will likely continue to threaten certain habitats. For conservation of species to be effective, it is important to understand the degree to which threatened habitats are being used by threatened species.
-##### One highly threatened species whose aggregation ecology requires greater study is the bank swallow (*Riparia riparia*). Bank swallow populations in Canada are estimated to have declined by 98% since the 1980s (@Saldanha2019). Currently, the threatened status of these birds in Ontario means that 50 m surrounding their breeding colonies must be protected from alteration (Bank Swallow General Habitat Description | Ontario.Ca, n.d.). However, it has been discovered that bank swallows not only form aggregate groups in breeding colonies, but also congregate at night to roost in wetlands around their colonies (@Falconer2016). Unfortunately, the use of wetlands at night by these birds has not been taken into consideration in their habitat protection plan due to the recent discovery of this phenomenon. Much remains unknown about the movement ecology of these birds, and studies must be conducted to evaluate their use of wetlands to inform recovery strategies. Currently, we have limited data on the proportion of nights bank swallows use wetland roosts during the breeding period. Preliminary studies indicate that bank swallow roosting behaviour is negatively associated with night time light availability, and that males utilize wetland roosts more than females during the early breeding period (@Falconer2016; @Saldanha2019). Unfortunately, these evaluations have only been conducted on a small number of individuals, limiting the conclusions that can be drawn on overall patterns. For recovery plans to be effective it is important to identify the degree to which bank swallows are roosting in wetlands and determine what conditions may modify this roosting behaviour. 
+##### Various animals across taxa are known to form aggregate groups during their lifecycle (Bednekoff, 2003). This phenomenon can become problematic when faced with habitat modification if this alters the suitable habitat where this clustering behaviour is centered. For example, during the winter, the eastern migratory monarch butterfly population forms a single roosting colony of millions of individuals in a very small region of oyamel forest in Mexico. While many factors contribute to declining monarch butterfly populations, one of the most concerning is the illegal logging of the  oyamel forests which provide this rare roosting habitat for monarchs (Flores-Martinez et al., 2019). Unfortunately, habitat alteration and loss is only projected to increase as human infrastructure expands, which will likely continue to threaten certain habitats. For conservation of species to be effective, it is important to understand the degree to which threatened habitats are being used by threatened species.
+##### One highly threatened species whose aggregation ecology requires greater study is the bank swallow (*Riparia riparia*). Bank swallow populations in Canada are estimated to have declined by 98% since the 1980s (Saldanha et al., 2019). Currently, the threatened status of these birds in Ontario means that 50 m surrounding their breeding colonies must be protected from alteration (Bank Swallow General Habitat Description | Ontario.Ca, n.d.). However, it has been discovered that bank swallows not only form aggregate groups in breeding colonies, but also congregate at night to roost in wetlands around their colonies (Falconer et al., 2016). Unfortunately, the use of wetlands at night by these birds has not been taken into consideration in their habitat protection plan due to the recent discovery of this phenomenon. Much remains unknown about the movement ecology of these birds, and studies must be conducted to evaluate their use of wetlands to inform recovery strategies. Currently, we have limited data on the proportion of nights bank swallows use wetland roosts during the breeding period. Preliminary studies indicate that bank swallow roosting behaviour is negatively associated with night time light availability, and that males utilize wetland roosts more than females during the early breeding period (Falconer et al., 2016; Saldanha et al., 2019). Unfortunately, these evaluations have only been conducted on a small number of individuals, limiting the conclusions that can be drawn on overall patterns. For recovery plans to be effective it is important to identify the degree to which bank swallows are roosting in wetlands and determine what conditions may modify this roosting behaviour. 
 
 ##### In this paper, I will use a database of 52 bank swallows observed on 49 nights to explore bank swallow roosting behaviour. The results of this paper will show how often bank swallows are using major wetlands to roost and what factors affect their use of wetlands for roosting. If bank swallow individuals have a high probability of using wetland roosts each night, then wetlands are likely an important habitat for these birds. Additionally, if bank swallows show significant drop offs in use of wetlands with increasing distance from their colony, then wetlands in close proximity to colonies may need to be prioritized for protection in order to help the recovery of bank swallow populations.
 
@@ -32,7 +31,7 @@ knitr::opts_knit$set(root.dir = 'C:/Users/Manon/Documents/BIO8940 - Advanced Sta
 ## Methods:
 ##### In summer 2015, 52 bank swallows were captured, sexed, and tagged at breeding colonies along the shore of Lake Erie and in sand and gravel pits near Long Point, Ontario. Automated radio telemetry systems were also installed at each colony and throughout the Long Point wetland complex. Between June 2nd and July 21st, 2015, tagged birds were tracked for movement between their colony and the main wetland complex. These data were then visually analyzed and a "roost" success value was assigned to each bird's evening movement. Birds that were detected in the wetland complex in the late evening and early the following morning were assigned a roost value of 1 as they stayed at the wetland overnight (roosted). Birds that were detected at their colony in the late evening and early the following morning were assigned a roosting value of 0 as they did not leave the colony (did not roost). Any nights where birds were not detected in the same location both in the morning and the evening were removed from the dataset (*from my understanding). The distance and ordinal date of the roosting movement were also recorded. Distance was calculated as the distance from the colony to the mean location of the wetland complex at Long Point.
 
-##### I also collected environmental variables using the package RNCEP. The time and location of birds in the evening were used with this package to determine the evening's wind component vectors (N/S and E/W), the illumated proportion of the moon (1 being full moon, 0 being new moon), and the percentage cloud cover. A study in New Brunswick indicated that light availability (a combination of moon illumination and cloud cover) affected the roosting movement behaviour of bank swallows (@Saldanha2019). Consequently, I multiplied the proportion of moon illumination with the proportion of open sky (1 - proportion of cloud cover) to get the light availability at the time of bird detection. Finally, the degree of flow assistance (tailwind) was determined using the RNCEP function NCEP.Tailwind(). Using the north-south and east-west wind components on the evening of observation, and the direction from the bird's colony to the mean wetland location, the airflow assistance for that direction of travel was determined. The resulting tailwind variable takes into account wind speed in the direction of the bird's travel but yields a unitless value. Negative values represent airflow against the animal's direction of travel and positive values represent airflow in the animal's direction of travel.
+##### I also collected environmental variables using the package RNCEP. The time and location of birds in the evening were used with this package to determine the evening's wind component vectors (N/S and E/W), the illumated proportion of the moon (1 being full moon, 0 being new moon), and the percentage cloud cover. A study in New Brunswick indicated that light availability (a combination of moon illumination and cloud cover) affected the roosting movement behaviour of bank swallows (Saldanha et al., 2019). Consequently, I multiplied the proportion of moon illumination with the proportion of open sky (1 - proportion of cloud cover) to get the light availability at the time of bird detection. Finally, the degree of flow assistance (tailwind) was determined using the RNCEP function NCEP.Tailwind(). Using the north-south and east-west wind components on the evening of observation, and the direction from the bird's colony to the mean wetland location, the airflow assistance for that direction of travel was determined. The resulting tailwind variable takes into account wind speed in the direction of the bird's travel but yields a unitless value. Negative values represent airflow against the animal's direction of travel and positive values represent airflow in the animal's direction of travel.
 
 ### Statistical Methods:
 ##### I fit a generalized linear mixed effects model using a binomial distribution to determine which factors affect the probability of a bank swallow roosting overnight at the wetland (1), or whether it stays at the colony (0). I included distance, nighttime illumination, tailwind, ordinal date, sex of the individual, and the interaction of sex and ordinal date as fixed predictors. I also included the random variable of individual ID nested within colony, as individuals were only part of one breeding colony for the duration of monitoring, and roosting observations on different nights were on the same 52 individuals.
@@ -69,16 +68,7 @@ library(tidyverse) #for data management/processing
 # #IF YOU WISH TO RETRIEVE THE CLIMATE DATA YOURSELF BELOW PLEASE UNCOMMENT & LOAD THE FILE departure_dat.csv (LINE 21) AND UNCOMMENT THE SECTION BELOW
 
 
-# # get surface air temperature at the detected time and location of the bird (data interpolated between weather stations and between times)
-# departure$air_temp = NCEP.interp.surface('air.sig995', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = FALSE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
-
-# # get precipitable water (total amount) (kg/m^2) in the air at time of detection - same interpolation
-# departure$precip = NCEP.interp.surface('pr_wtr.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
-
-# # get the precipitation rate for 6 hours after the departure time (kg/m^2/s, equivalent to mm/s); same interpolation
-# departure$precip_rate = NCEP.interp.gaussian('prate.sfc',departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
-
-# # Get total cloud cover, in %, for the location of bird detection - same interpolation
+# # Get total cloud cover, in %, for the location of bird detection (data interpolated between weather stations and between times)
 # departure$cloud_cover = NCEP.interp.gaussian('tcdc.eatm', departure$lat2, departure$lon2, departure$time_departure, reanalysis2 = TRUE, interpolate.space = TRUE, interpolate.time = TRUE, keep.unpacking.info = FALSE, return.units = TRUE,interp = 'IDW', p = 1, status.bar=FALSE)
 
 # # get the East-West wind component
@@ -179,16 +169,16 @@ plotResiduals(simulateResiduals(fittedModel=m_sqrd,plot = F), form=df.scale$dist
 ##### I will continue with the evaluations of the residuals for the other predictors below.
 
 ```{r, echo=FALSE}
-plotResiduals(dharm_output, form=df.scale$ordinal_date) #fine
+plotResiduals(dharm_output, form=df.scale$ordinal_date) #residuals for the scaled +centered ordinal date
 ```
 ##### Ordinal date appears to be fine, with no patterns or evidence of over or under dispersion.
 ```{r, echo=FALSE}
-plotResiduals(dharm_output, form=df.scale$sex) #fine
+plotResiduals(dharm_output, form=df.scale$sex) #residuals for sex effect
 ```
 ##### Sex also appears to be fine.
 
 ```{r, echo=FALSE}
-plotResiduals(dharm_output,form=df.scale$tailwind)
+plotResiduals(dharm_output,form=df.scale$tailwind) #residuals for tailwind effect
 ```
 ##### Tailwind also appears to be fine.
 
@@ -199,7 +189,10 @@ plotResiduals(dharm_output, form=df.scale$colony) #some issues but not terrible
 ##### There are some issues in the random effects here but they do not appear too bad. Documentation on how to evaluate these issues is scarce. I will check the QQ plot for normality of the random effects more closely.
 
 ```{r}
+
+# Get dataframe of random effects
 r5 = as.data.frame(ranef(m))
+#QQplot of residuals
 ggplot(data = r5, aes(sample = condval)) +
   geom_qq() + geom_qq_line() +
   facet_wrap(~ grpvar) +
@@ -215,6 +208,7 @@ summary(m)
 ```
 ##### There is a significant relationship with each variable except for the nighttime illumination % (illum). Because of the log link function for binomial variables, interpretation of these raw estimates is not clear. Thus, I will focus on the back-transformed effects plots on the observed scale. 
 ```{r,echo=FALSE}
+# plot the effect of total nighttime illumination
 plot(effect("illum",m),rescale.axis=F,main="",ylab="Probability of roosting",xlab="Total nighttime illumination (%)")
 
 ```
@@ -300,3 +294,11 @@ p1+p2
 ##### I also found that tailwind to roost site has a significant effect on the probability of roosting for bank swallows. A direct headwind is associated with a mean probability estimate of roosting at 5%, while a direct tailwind increases the mean probability estimate of roosting 3x to 16%. Future observational studies on roosting probability should take into account the wind vector to control for noise in the observed data.
 
 ##### Finally, my study both confirmed and failed to confirm predictors of roosting found by previous studies. For total nighttime illumination, I did not find a significant effect on probability of roosting. Illumination in my study did show a negative effect but it was estimated to be only a 2.5% mean difference across the entire range of illumination, from 100% cloud cover and new moon to no cloud cover full moon. In contrast, I did confirm differential roosting probabilities between males and females. Males had an estimated 2x the probability of females to roost in the early breeding period. Additionally, I found that males and females seem to swap relative roost probability in the late breeding period, with females becoming more likely to roost than males. However, this phenomenon of female roosting probability exceeding male roosting probability was dwarfed by the overall trend across both sexes. In the late season, both sexes exhibited 80%-90% probability of roosting in wetlands. This high use of wetlands in the late season indicates that wetlands could be extremely important to the ecology of bank swallows. Again, if the hypothesis that wetlands provide safety from predation is proven, this high use of wetlands by these birds would mean they are of critical importance for bank swallows, especially considering that less than 10% of total wetland habitats in southern Ontario remain of those pre-industrial revolution. The evidence that individuals vary significantly in their use of wetlands as roosts indicates that a test of the predation hypothesis is possible. I suggest this as the next step in evaluating the roosting behaviour of bank swallows.
+
+
+##### Bank Swallow General Habitat Description | ontario.ca. (n.d.). Retrieved April 24, 2023, from http://www.ontario.ca/page/bank-swallow-general-habitat-description
+##### Bank Swallow (Riparia riparia): Recovery strategy 2022—Canada.ca. (n.d.). Retrieved April 24, 2023, from https://www.canada.ca/en/environment-climate-change/services/species-risk-public-registry/recovery-strategies/bank-swallow-2022.html
+##### Bednekoff, P. A. (2003). A revival for group living: Living in Groups by Jens Krause and Graeme D. Ruxton. Oxford University Press, 2002. £24.95, pbk (210 pages) ISBN 0 1985 0818 2. Trends in Ecology & Evolution, 18(6), 274. https://doi.org/10.1016/S0169-5347(03)00031-4
+##### Falconer, C. M., Mitchell, G. W., Taylor, P. D., & Tozer, D. C. (2016). Prevalence of Disjunct Roosting in Nesting Bank Swallows (Riparia riparia). The Wilson Journal of Ornithology, 128(2), 429–434. https://doi.org/10.1676/1559-4491-128.2.429
+##### Flores-Martínez, J. J., Martínez-Pacheco, A., Rendón-Salinas, E., Rickards, J., Sarkar, S., & Sánchez-Cordero, V. (2019). Recent Forest Cover Loss in the Core Zones of the Monarch Butterfly Biosphere Reserve in Mexico. Frontiers in Environmental Science, 7. https://www.frontiersin.org/articles/10.3389/fenvs.2019.00167
+##### Saldanha, S., Taylor, P., Imlay, T., & Leonard, M. (2019). Avian Conservation and Ecology: Biological and environmental factors related to communal roosting behavior of breeding Bank Swallow (<em>Riparia riparia</em>). Avian Conservation and Ecology, 14(2). https://doi.org/10.5751/ACE-01490-140221
